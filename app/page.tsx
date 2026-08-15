@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import Lenis from "lenis";
+import DnsCrystal from "./DnsCrystal";
 
 const chapters = [
   ["introduction", "Intro"], ["lien", "DNS / SEO"], ["domaine", "Domaine"],
@@ -212,7 +213,9 @@ export default function Home() {
   const heroCopyOpacity = useTransform(heroProgress, [0, .2, .38], [1, 1, 0]);
   const heroCopyY = useTransform(heroProgress, [0, .38], [0, -90]);
   const gridRotate = useTransform(heroProgress, [0, .5, 1], [-2, 4, -5]);
-  const wipeY = useTransform(heroProgress, [0, .48, .68, .84, 1], ["110%", "110%", "38%", "-18%", "-115%"]);
+  // La nappe balaie l'écran en fin de hero : elle arrive tard et sort vite,
+  // sinon elle stationne en aplat plein cadre sur un tiers du scroll.
+  const wipeY = useTransform(heroProgress, [0, .62, .78, .9, 1], ["118%", "118%", "34%", "-45%", "-135%"]);
   const dataOpacity = useTransform(heroProgress, [0, .18, .5, .88, 1], [.35, 1, .55, 1, 0]);
 
   useEffect(() => {
@@ -273,11 +276,15 @@ export default function Home() {
         <div className="hero-sticky">
           <motion.div className="scene-grid hero-grid" style={{ rotate: gridRotate }} aria-hidden="true" />
           <div className="hero-crosses" aria-hidden="true">{Array.from({length:12}).map((_,i)=><i key={i}/>)}</div>
+          {/* Le cristal WebGL se superpose au prisme CSS et le masque une fois
+              prêt ; sans WebGL (ou en reduced-motion) le prisme reste seul. */}
           <motion.div className="dns-prism" style={{ scale: prismScale, rotate: prismRotate, y: prismY }} aria-hidden="true">
             <div className="prism-skin"><span>DNS</span><i/><i/><i/></div>
             <div className="prism-outline"><b>site.fr</b></div>
             <div className="prism-shadow"/>
           </motion.div>
+          <DnsCrystal progress={heroProgress} enabled={!reduce} />
+          <span className="crystal-label" aria-hidden="true">DNS</span>
           {/* Couche scroll (MotionValues) et couche d'entrée (animate) séparées :
               les cumuler sur le même élément fait s'écraser opacity / y. */}
           <motion.div className="hero-content" style={{ opacity: heroCopyOpacity, y: heroCopyY }}>

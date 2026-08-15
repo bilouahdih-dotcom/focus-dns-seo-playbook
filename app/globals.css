@@ -46,12 +46,15 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .read-line{height:2px;position:fixed;inset:0 0 auto;z-index:300}.read-line i{height:100%;display:block;background:var(--gold);box-shadow:0 0 14px rgba(201,162,39,.55);transition:width .12s linear}
 
 /* Global chrome */
-.global-header{height:100px;padding:0 4.2vw;position:fixed;inset:0 0 auto;z-index:180;display:flex;align-items:center;color:var(--white);background:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,0));mix-blend-mode:difference}
+/* Pas de mix-blend-mode:difference ici : sur l'or de la marque (#c9a227) la
+   différence vire au bleu et le logo devient illisible. Le dégradé sombre
+   suffit à tenir le contraste sur toutes les scènes. */
+.global-header{height:100px;padding:0 4.2vw;position:fixed;inset:0 0 auto;z-index:180;display:flex;align-items:center;color:var(--text-primary);background:linear-gradient(180deg,rgba(0,0,0,.92),rgba(0,0,0,.55) 55%,rgba(0,0,0,0))}
 .wordmark{display:flex;align-items:center;gap:12px}.focus-logo{height:26px;width:auto;display:block;fill:currentColor}
 .global-header nav{margin-left:auto;display:flex;gap:40px}.global-header nav a{color:#aaa9a4;font:500 11px/1 var(--font-geist-mono);letter-spacing:.12em;transition:.3s}.global-header nav a:hover{color:#fff}
 .header-action{margin-left:50px;padding:11px 11px 11px 19px;display:flex;align-items:center;gap:24px;border:1px solid rgba(255,255,255,.4);border-radius:99px;font:600 10px/1 var(--font-geist-mono);letter-spacing:.09em}.header-action span{width:26px;height:26px;display:grid;place-items:center;color:#050505;background:#fff;border-radius:50%;font-size:13px}
 .mobile-trigger{display:none;width:40px;height:40px;background:transparent;border:1px solid rgba(255,255,255,.35);border-radius:50%;font:600 10px/1 var(--font-geist-mono)}
-.chapter-rail{width:36px;height:100vh;position:fixed;left:0;top:0;z-index:190;border-right:1px solid var(--border-medium);mix-blend-mode:difference}
+.chapter-rail{width:36px;height:100vh;position:fixed;left:0;top:0;z-index:190;border-right:1px solid var(--border-medium);background:rgba(0,0,0,.55);backdrop-filter:blur(6px)}
 .chapter-rail nav{height:74vh;margin-top:13vh;display:grid;grid-template-rows:repeat(12,1fr)}.chapter-rail nav a{position:relative;display:flex;align-items:center;color:#5c5c59;font:600 10px/1 var(--font-geist-mono)}.chapter-rail nav a::before{content:'';width:8px;height:1px;margin-right:10px;background:currentColor;transition:.3s}.chapter-rail nav a span{display:none}.chapter-rail nav a b{position:absolute;left:20px;opacity:0;white-space:nowrap;letter-spacing:.09em;transform:translateX(-5px);transition:.3s}.chapter-rail nav a.active{color:#fff}.chapter-rail nav a.active::before{width:18px;background:var(--gold)}.chapter-rail nav a.active b{opacity:1;transform:none}.rail-track{width:1px;height:74vh;position:absolute;top:13vh;right:-1px;background:var(--border-light)}.rail-track i{display:block;background:var(--gold);transition:height .15s}.chapter-rail>small{position:absolute;left:9px;bottom:4vh;color:#777;font:600 10px/1 var(--font-geist-mono);writing-mode:vertical-rl}
 
 /* Shared technical grid */
@@ -82,7 +85,16 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .prism-skin>span{position:relative;z-index:2;color:rgba(255,255,255,.75);font:700 clamp(22px,3vw,42px)/1 var(--font-geist-mono);letter-spacing:.34em;text-indent:.34em;mix-blend-mode:difference}.prism-skin>i{width:1px;height:114%;position:absolute;left:50%;top:-7%;background:rgba(255,255,255,.18)}.prism-skin>i:nth-of-type(2){transform:rotate(53deg)}.prism-skin>i:nth-of-type(3){transform:rotate(-53deg)}
 .prism-outline{inset:-6%;z-index:-1;background:transparent;border:1px solid rgba(255,255,255,.5);clip-path:none;transform:translate3d(-28px,34px,-30px) rotate(-4deg)}.prism-outline::before{content:'';position:absolute;inset:0;border:1px solid rgba(201,162,39,.45);clip-path:polygon(50% 0,96% 28%,82% 100%,18% 100%,4% 28%)}.prism-outline b{position:absolute;right:5%;bottom:4%;color:#8d8a80;font:600 10px/1 var(--font-geist-mono);letter-spacing:.18em}
 .prism-shadow{z-index:-2;background:rgba(201,162,39,.15);filter:blur(1px);transform:translate3d(45px,50px,-80px)}
-.hero-light-wipe{height:62vh;position:absolute;inset:auto -8vw -10vh;z-index:9;display:flex;align-items:flex-start;justify-content:flex-end;padding:6vh 10vw;color:#0a0800;background:var(--gold);transform:rotate(-4deg);transform-origin:center;box-shadow:0 -18px 60px rgba(201,162,39,.22)}.hero-light-wipe::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.08) 1px,transparent 1px);background-size:150px 132px}.hero-light-wipe span{position:relative;font:650 10px/1 var(--font-geist-mono);letter-spacing:.16em}
+/* Cristal WebGL : même emprise que le prisme CSS, qu'il remplace dès qu'il
+   est prêt (.is-live). Le libellé DNS reste en HTML, donc net à toute taille. */
+.dns-crystal{width:min(50vw,660px);aspect-ratio:.86;position:absolute;left:67%;top:46%;z-index:5;translate:-50% -50%;opacity:0;transition:opacity .9s var(--ease);pointer-events:none}
+.dns-crystal.is-live{opacity:1}
+.dns-crystal canvas,.crystal-canvas{width:100%!important;height:100%!important;display:block}
+.dns-crystal.is-live~.crystal-label{opacity:.85}
+.crystal-label{position:absolute;left:67%;top:46%;z-index:6;translate:-50% -50%;opacity:0;color:#fff;font:700 clamp(18px,2.1vw,30px)/1 var(--font-geist-mono);letter-spacing:.42em;text-indent:.42em;mix-blend-mode:difference;transition:opacity .9s var(--ease);pointer-events:none}
+.hero-sticky:has(.dns-crystal.is-live) .dns-prism{opacity:0;transition:opacity .7s var(--ease)}
+
+.hero-light-wipe{height:46vh;position:absolute;inset:auto -8vw -10vh;z-index:9;display:flex;align-items:flex-start;justify-content:flex-end;padding:6vh 10vw;color:#0a0800;background:var(--gold);transform:rotate(-4deg);transform-origin:center;box-shadow:0 -18px 60px rgba(201,162,39,.22)}.hero-light-wipe::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.08) 1px,transparent 1px);background-size:150px 132px}.hero-light-wipe span{position:relative;font:650 10px/1 var(--font-geist-mono);letter-spacing:.16em}
 
 /* Scene system */
 .scene{min-height:112svh;padding:clamp(125px,13vw,190px) clamp(35px,7vw,110px) clamp(95px,10vw,145px) clamp(60px,8vw,125px);position:relative;overflow:hidden;content-visibility:auto;contain-intrinsic-size:auto 1100px}
