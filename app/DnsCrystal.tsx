@@ -114,12 +114,25 @@ export default function DnsCrystal({ progress, enabled }: { progress: MotionValu
       const envTarget = pmrem.fromEquirectangular(equirect);
       scene.environment = envTarget.texture;
 
-      /* Icosaèdre subdivisé + flatShading : un solide à peu de faces (octaèdre)
-         renvoie une seule zone de l'environnement par face et retombe en
-         aplats. Il faut beaucoup de facettes pour que chaque plan attrape un
-         reflet différent — c'est ce qui donne l'aspect taillé. */
-      const geometry = new THREE.IcosahedronGeometry(1.5, 1);
-      geometry.scale(.92, 1.3, .92);
+      /* Le "F" du logo Focus extrudé en volume : le tracé SVG de la marque est
+         converti en Shape puis extrudé, biseau compris. Les biseaux jouent le
+         rôle des facettes — un solide à faces trop larges renverrait une seule
+         zone de l'environnement par face et retomberait en aplats. */
+      const { SVGLoader } = await import("three/examples/jsm/loaders/SVGLoader.js");
+      if (disposed) return;
+      const logoPath = "M123.05 0V36.93H41.15V87.33L41.45 87.63H120.65V124.36H41.45L41.15 124.66V202.01L20.52 213.39L0.200012 225.56L0 28.35V8.38998C1 4.14998 4.13998 0.999979 8.38998 0.00997925H123.05V0Z";
+      const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 685 226"><path d="${logoPath}"/></svg>`;
+      const parsed = new SVGLoader().parse(svgMarkup);
+      const geometry = new THREE.ExtrudeGeometry(
+        parsed.paths.flatMap((path) => SVGLoader.createShapes(path)),
+        { depth: 42, bevelEnabled: true, bevelThickness: 13, bevelSize: 11, bevelSegments: 4, curveSegments: 6 },
+      );
+      // Le SVG a son origine en haut à gauche et l'axe Y inversé : on recentre
+      // et on remet le glyphe à l'endroit avant de le ramener à l'échelle scène.
+      geometry.center();
+      geometry.rotateZ(Math.PI);
+      geometry.rotateY(Math.PI);
+      geometry.scale(.0145, .0145, .0145);
 
       const material = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color("#ffffff"),

@@ -1,0 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+
+/**
+ * Écran d'entrée, repris d'alche.studio : voile noir plein écran, logo tracé
+ * au trait puis rempli, phrase de marque en dessous, puis fondu.
+ * Le voile ne bloque jamais la lecture : il se retire seul, et il est sauté
+ * quand l'utilisateur refuse les animations.
+ */
+const LOGO_PATHS = [
+  "M123.05 0V36.93H41.15V87.33L41.45 87.63H120.65V124.36H41.45L41.15 124.66V202.01L20.52 213.39L0.200012 225.56L0 28.35V8.38998C1 4.14998 4.13998 0.999979 8.38998 0.00997925H123.05V0Z",
+  "M684.76 155.69C684.3 162.55 682.54 168.78 679 174.59C657.71 209.53 591.44 208.07 575.2 169.06C574.33 166.97 572.7 162.5 572.68 160.39C572.68 159.89 572.61 159.01 573.18 158.85L602.11 152.94C602.43 153.01 602.65 153.15 602.81 153.44C603.3 154.29 603.75 157.04 604.21 158.23C609.7 172.37 631.26 176.02 643.53 169.31C651.98 164.69 655.5 151.56 646.97 145.44C636.17 137.68 613.96 137.51 600.61 132.28C581.75 124.9 574.6 111.86 575.46 91.9201C577.08 54.4901 621.28 45.0201 650.93 55.0401C661.71 58.6801 673.82 66.5201 678.28 77.4101C679.44 80.2401 680.25 83.7801 680.92 86.5801C681.06 87.1801 681.451 89.5701 680.621 89.6301L651.91 95.3901C650.44 95.1601 648.581 90.6201 647.741 89.3701C641.341 79.8101 627.08 76.1101 616.42 79.7601C606.92 83.0101 604.5 94.3901 610.92 101.81C619.97 112.28 647.81 112.72 661.3 118.14C674.79 123.56 683.941 136.92 684.731 151.91V155.7L684.76 155.69Z",
+  "M8.39975 0C4.14975 1 1.00977 4.14001 0.00976562 8.38V0H8.39975Z",
+  "M136.36 152.17C128.57 129.83 131.95 102.66 144.62 82.7301C171.03 41.2201 237.72 40.2801 264.04 82.3701C283.39 113.32 278.68 161.78 248.99 184.83C220.93 206.6 174.85 204.71 150.71 177.85C143.97 170.36 139.64 161.62 136.35 152.17H136.36ZM201.71 80.8901C154.25 83.5201 153.15 162.87 196.07 169.86C211.24 172.33 227.79 166.66 236.04 153.31C253.52 125 240.3 78.7501 201.72 80.8901H201.71Z",
+  "M464.43 56.0901V139.23C465.78 158 473.35 169.52 493.3 169.26C513.25 169 519.96 157.99 522.34 139.99C524.34 124.86 523.2 108.02 523.15 92.7201C523.12 80.5101 523.2 68.2901 523.15 56.0801H556.11V195.4L523.55 195.51C523.13 195.27 523.18 194.92 523.14 194.52C522.86 191.66 522.79 183.91 523.14 181.13C523.22 180.53 523.57 180.38 523.67 180.06C523.98 179.01 522.82 179.64 522.35 180.15C520.83 181.82 519.64 184.7 518.15 186.53C504.98 202.73 478.43 202.38 460.75 194.59C437.59 184.39 431.36 165.01 430.85 141.23C430.63 130.81 430.89 120.27 430.87 109.89C430.84 91.9601 430.87 74.0201 430.87 56.0901H464.43Z",
+  "M408.63 75.3098C412.79 80.9198 417.1 90.7198 418.14 97.6398C418.17 97.8598 418.33 98.3198 418.09 98.4898L387.93 105.38C383.85 95.0998 377.16 86.2198 366.19 82.8898C310.24 65.8898 303.2 175.91 359.43 170.23C374.37 168.72 384.21 157.78 389.13 144.31L419.06 152.31C419.18 153.82 418.49 155.28 417.98 156.68C405.26 191.42 368.74 207.55 333.59 196.3C306.15 187.52 290.15 165.08 287.47 136.79C284.51 105.49 295.02 74.4498 323.66 58.8398C351.02 43.9298 389.69 49.7898 408.62 75.3098H408.63Z",
+];
+
+const BASELINE = "Le DNS ne vous classe pas. Il sécurise le terrain.";
+
+export default function Loader() {
+  const reduce = useReducedMotion();
+  const [gone, setGone] = useState(false);
+  const [removed, setRemoved] = useState(false);
+
+  useEffect(() => {
+    if (reduce) return; // le composant ne rend rien dans ce cas
+    // Le voile bloque le scroll le temps de l'intro, puis se retire.
+    document.documentElement.style.overflow = "hidden";
+    const fade = window.setTimeout(() => setGone(true), 2350);
+    // Retrait du DOM sur minuterie, sans dépendre de la fin du fondu : dans un
+    // onglet d'arrière-plan les rAF sont bridés et l'animation resterait gelée,
+    // laissant le voile en place au retour de l'utilisateur.
+    const drop = window.setTimeout(() => setRemoved(true), 3250);
+    return () => {
+      window.clearTimeout(fade);
+      window.clearTimeout(drop);
+      document.documentElement.style.overflow = "";
+    };
+  }, [reduce]);
+
+  useEffect(() => {
+    if (gone) document.documentElement.style.overflow = "";
+  }, [gone]);
+
+  if (reduce || removed) return null;
+
+  return (
+    <motion.div
+      className="loader"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: gone ? 0 : 1 }}
+      transition={{ duration: .7, ease: [.25, .46, .45, .94] }}
+      onAnimationComplete={() => { if (gone) document.documentElement.style.overflow = ""; }}
+      style={{ pointerEvents: gone ? "none" : "auto" }}
+      aria-hidden="true"
+    >
+      <svg className="loader-logo" viewBox="0 0 685 226" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {LOGO_PATHS.map((d, index) => (
+          <motion.path
+            key={d.slice(0, 24)}
+            d={d}
+            stroke="#c9a227"
+            strokeWidth={2}
+            initial={{ pathLength: 0, fillOpacity: 0 }}
+            animate={{ pathLength: 1, fillOpacity: 1 }}
+            transition={{
+              pathLength: { duration: 1.15, delay: index * .07, ease: [.25, .46, .45, .94] },
+              fillOpacity: { duration: .6, delay: .95 + index * .05 },
+            }}
+            fill="#ffffff"
+          />
+        ))}
+      </svg>
+      <div className="loader-text">
+        {BASELINE.split("").map((char, index) => (
+          <motion.span
+            key={`${char}-${index}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: .4, delay: .75 + index * .012 }}
+          >{char === " " ? " " : char}</motion.span>
+        ))}
+      </div>
+    </motion.div>
+  );
+}

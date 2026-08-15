@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import Lenis from "lenis";
 import DnsCrystal from "./DnsCrystal";
+import Loader from "./Loader";
 
 const chapters = [
   ["introduction", "Intro"], ["lien", "DNS / SEO"], ["domaine", "Domaine"],
@@ -257,6 +258,7 @@ export default function Home() {
 
   return (
     <main className="studio-shell">
+      <Loader />
       <div className="read-line" aria-hidden="true"><i style={{ width: `${progress}%` }} /></div>
 
       <header className="global-header">
@@ -284,7 +286,6 @@ export default function Home() {
             <div className="prism-shadow"/>
           </motion.div>
           <DnsCrystal progress={heroProgress} enabled={!reduce} />
-          <span className="crystal-label" aria-hidden="true">DNS</span>
           {/* Couche scroll (MotionValues) et couche d'entrée (animate) séparées :
               les cumuler sur le même élément fait s'écraser opacity / y. */}
           <motion.div className="hero-content" style={{ opacity: heroCopyOpacity, y: heroCopyY }}>
