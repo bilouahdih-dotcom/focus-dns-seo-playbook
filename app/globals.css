@@ -114,9 +114,10 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .manifesto p{position:relative;max-width:620px;margin:0;color:#3f3003;font-size:14px}
 
 .coverage{position:relative;z-index:1;padding:clamp(90px,11vw,150px) 6vw clamp(90px,11vw,150px) 8vw;background:rgba(3,3,3,.93)}
-.coverage-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border-medium);border:1px solid var(--border-medium)}
-@media(max-width:1200px){.coverage-grid{grid-template-columns:repeat(2,1fr)}}
-.coverage-grid article{min-height:280px;padding:30px;display:flex;flex-direction:column;background:var(--bg-card)}
+.coverage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border-medium);border:1px solid var(--border-medium)}
+@media(max-width:1400px){.coverage-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.coverage-grid{grid-template-columns:1fr}}
+.coverage-grid article{min-height:260px;padding:26px;display:flex;flex-direction:column;background:var(--bg-card)}
 .coverage-grid span{color:var(--gold);font:700 13px/1 var(--font-geist-mono)}
 .coverage-grid h3{margin:auto 0 12px;font:600 13px/1 var(--font-geist-mono);letter-spacing:.14em;color:var(--text-primary)}
 .coverage-grid p{margin:0;color:var(--text-muted);font-size:13px}
@@ -157,7 +158,7 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .global-footer .footer-links a:hover{color:var(--gold)}
 /* Le groupe s'allonge à chaque édition : sous 1300px on garde les numéros,
    qui suffisent à se repérer une fois la collection connue. */
-@media(max-width:1300px){.edition-switch a b{display:none}.edition-switch a{padding:9px 12px}}
+@media(max-width:1500px){.edition-switch a b{display:none}.edition-switch a{padding:9px 12px}}
 @media(max-width:800px){.edition-switch{right:auto;left:52px;top:88px}}
 
 /* Shared technical grid */
@@ -213,7 +214,12 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .impact-matrix{margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr)}.impact-matrix article{min-height:280px;padding:24px;border-left:0}.impact-matrix article+article{border-left:1px solid var(--border-medium)}.impact-matrix article>span,.signal-grid article>span{color:var(--gold);font:700 13px/1 var(--font-geist-mono)}.impact-matrix h3{margin:80px 0 11px;font-size:18px}.impact-matrix p{margin:0;color:var(--text-muted);font-size:13px}.impact-matrix article>b{position:absolute;left:24px;bottom:22px;color:var(--text-light);font:600 12px/1 var(--font-geist-mono);letter-spacing:.1em}
 .protocol{padding:19px;display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start;background:var(--bg-card-elevated);border:1px solid var(--border-medium)}.protocol>span{width:30px;height:30px;display:grid;place-items:center;border:1px solid #4d4b45;border-radius:50%;font-weight:800}.protocol b{font:650 13px/1 var(--font-geist-mono);letter-spacing:.08em}.protocol p{margin:6px 0 0;color:var(--text-muted);font-size:13px}.protocol-note{margin-top:14px;background:#191609;border-color:#65541c}.protocol-note>span{color:#050505;background:var(--gold);border-color:var(--gold)}.protocol-do{background:#11150d;border-color:#435025}.protocol-do>span{color:#050505;background:#a6b74d;border-color:#a6b74d}.protocol-avoid{background:var(--bg-card);border-color:var(--border-strong)}.protocol-avoid>span{color:#0a0800;background:var(--text-primary);border-color:var(--text-primary)}/* Les blocs protocole gardent leur fond sombre dans une scène or : ils doivent
    donc reprendre un texte clair, sinon ils héritent du noir de la scène. */
-.scene-gold .protocol{color:var(--text-primary)}.scene-gold .protocol p{color:var(--text-muted)}.protocol-row{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scene-gold .protocol{color:var(--text-primary)}.scene-gold .protocol p{color:var(--text-muted)}
+/* Même cas pour la liste d'étapes : ses numéros sont en or, invisibles si le
+   bloc reste sur le fond or de la scène. */
+.scene-gold .verification-stage ol{background:var(--bg-card);border-color:var(--border-medium)}
+.scene-gold .verification-stage li{border-top-color:var(--border-light)}
+.scene-gold .verification-stage li b{color:var(--text-primary)}.protocol-row{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* Canonical */
 .canonical-stage{min-height:420px;display:grid;grid-template-columns:1fr .7fr 1.05fr;gap:18px;align-items:center}.incoming-routes{display:grid;gap:8px}.incoming-routes small,.canonical-target>span,.redirect-engine>span{margin-bottom:8px;color:var(--text-muted);font:650 12px/1 var(--font-geist-mono);letter-spacing:.14em}.incoming-routes code{padding:17px;display:flex;align-items:center;gap:11px;background:var(--bg-card);border:1px solid var(--border-medium);font-size:13px}.incoming-routes code i{width:6px;height:6px;background:var(--text-light);border-radius:50%}.redirect-engine{text-align:center}.redirect-engine>strong{display:block;margin:10px 0;color:var(--gold);font:650 22px/1 var(--font-geist-mono)}.pulse-arrow{color:var(--gold);font-size:36px;animation:arrowPulse 1.8s ease-in-out infinite}@keyframes arrowPulse{50%{transform:translateX(10px)}}.redirect-engine>small{color:var(--text-muted);font:600 12px/1 var(--font-geist-mono);letter-spacing:.12em}.canonical-target{min-height:250px;padding:35px;display:flex;flex-direction:column;justify-content:center;background:var(--bg-page);color:var(--text-primary);box-shadow:18px 18px 0 rgba(201,162,39,.4)}.canonical-target strong{margin:16px 0 28px;font:500 clamp(20px,2vw,30px)/1 var(--font-geist-mono);letter-spacing:-.06em}.canonical-target b{font:600 12px/1 var(--font-geist-mono);letter-spacing:.1em}.canonical-target b i{width:6px;height:6px;margin-right:8px;display:inline-block;background:var(--gold);border-radius:50%;box-shadow:0 0 9px var(--gold)}

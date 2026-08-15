@@ -47,10 +47,10 @@ export default function Home() {
       chapters={chapters}
       navLinks={[["#lien", "Principes"], ["#domaine", "Architecture"], ["#records", "Système"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
-      edition="PLAYBOOK 014 · SEO INFRASTRUCTURE · 2026"
+      edition="PLAYBOOK 015 · SEO INFRASTRUCTURE · 2026"
       baseline="Le DNS ne vous classe pas. Il sécurise le terrain."
       hero={{
-        kicker: "PLAYBOOK 014 / SEO INFRASTRUCTURE",
+        kicker: "PLAYBOOK 015 / SEO INFRASTRUCTURE",
         title: <><span>DNS / SEO</span>{" "}<br/><em>INFRASTRUCTURE</em>{" "}<br/>PLAYBOOK</>,
         brief: <>Construire une infrastructure <strong>stable, rapide, sûre et canonique</strong> pour ne jamais laisser le DNS affaiblir le SEO.</>,
         telemetry: { label: "STATUS", state: "INFRASTRUCTURE READY", detail: "HTTPS · DNSSEC · 301" },
@@ -150,7 +150,7 @@ export default function Home() {
         title={<>Les faux raccourcis{" "}<br/><em>coûtent toujours plus cher.</em></>}
         description="Une zone DNS simple est plus facile à sécuriser, migrer, surveiller et réparer.">
         <div className="anti-grid">{[['01','Sous-domaines en masse','Ils n’ajoutent aucune autorité.'],['02','CNAME “pour le SEO”','Un alias ne crée pas de classement.'],['03','Staging indexable','Il expose doublons et données.'],['04','Versions en parallèle','Les signaux sont fragmentés.'],['05','Cibles orphelines','Elles cassent ou se détournent.'],['06','Migration sans rollback','TTL et ordre doivent être planifiés.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>ABORT</b></SpotlightCard>)}</div>
-        <div className="red-rule"><span>RULE / 014</span><p>N’utilisez jamais des dizaines de sous-domaines ou de CNAME pour manipuler le SEO. <strong>Google évalue le contenu et l’expérience, pas le volume d’entrées DNS.</strong></p></div>
+        <div className="red-rule"><span>RULE / 015</span><p>N’utilisez jamais des dizaines de sous-domaines ou de CNAME pour manipuler le SEO. <strong>Google évalue le contenu et l’expérience, pas le volume d’entrées DNS.</strong></p></div>
       </Scene>
 
       <Scene id="checklist" index="12" eyebrow="FINAL SYSTEM AUDIT" tone="gold"
@@ -162,7 +162,7 @@ export default function Home() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-dns-audit-v2')}catch{/* stockage facultatif */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 014</span><h3>Le DNS ne promet pas la première place.{" "}<br/><em>Il évite de partir avec un handicap.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-on-page">PLAYBOOK ON-PAGE <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 015</span><h3>Le DNS ne promet pas la première place.{" "}<br/><em>Il évite de partir avec un handicap.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-on-page">PLAYBOOK ON-PAGE <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

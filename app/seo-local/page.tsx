@@ -173,7 +173,7 @@ export default function SeoLocal() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-local-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>Le local ne récompense pas le plus gros.{" "}<br/><em>Il récompense le mieux tenu.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-dns">PLAYBOOK DNS <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>Le local ne récompense pas le plus gros.{" "}<br/><em>Il récompense le mieux tenu.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-technique">PLAYBOOK TECHNIQUE <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

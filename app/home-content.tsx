@@ -40,10 +40,18 @@ const EDITIONS = [
   {
     num: "014",
     date: "2026 · 08",
+    href: "/seo-technique",
+    title: "SEO technique",
+    line: "Rendre le site explorable, compréhensible et indexable par les robots.",
+    tags: ["crawl", "indexation", "robots.txt", "rendu js", "redirections"],
+  },
+  {
+    num: "015",
+    date: "2026 · 08",
     href: "/seo-dns",
     title: "DNS & Infrastructure",
     line: "Rendre le domaine stable, rapide et canonique : le socle sous tout le reste.",
-    tags: ["dns", "https", "dnssec", "cdn", "redirections"],
+    tags: ["dns", "https", "dnssec", "cdn", "301"],
   },
 ];
 
@@ -51,6 +59,7 @@ const COUVERTURE = [
   ["PAGE", "Ce que le moteur lit et comprend d'une page : intention, structure, contenu, balisage, vitesse ressentie."],
   ["AUTORITÉ", "Ce que les autres disent de vous : liens éditoriaux, mentions de marque, et les schémas à ne pas suivre."],
   ["TERRITOIRE", "Ce qui décide sur une recherche géolocalisée : la carte, la fiche d'établissement, les avis et les pages de lieu."],
+  ["MÉCANIQUE", "Ce qui se passe entre la requête du robot et l'index : exploration, rendu, statuts, architecture, migrations."],
   ["INFRASTRUCTURE", "Le socle sous tout le reste : résolution, chiffrement, version canonique, disponibilité du domaine."],
 ];
 
@@ -124,7 +133,7 @@ export default function HomeContent() {
 
   return (
     <main className="studio-shell">
-      <Loader baseline="Quatre playbooks. Une seule discipline." />
+      <Loader baseline="Cinq playbooks. Une seule discipline." />
       <DnsCrystal progress={kvProgress} pageProgress={pageProgress} enabled={!reduce} />
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
@@ -148,7 +157,7 @@ export default function HomeContent() {
               transition={{ duration: 1.25, ease: [.16, 1, .3, 1] }}>
               <div className="hero-kicker"><DecryptedText text="MENTALITÉ FOCUS / COLLECTION SEO" /><i /></div>
               <h1><SplitText delay={.25}><span>PLAYBOOKS</span>{" "}<br /><em>SEO</em></SplitText></h1>
-              <p className="kv-line">Quatre guides opérationnels : la page, l&apos;autorité, le territoire, l&apos;infrastructure.</p>
+              <p className="kv-line">Cinq guides opérationnels : la page, l&apos;autorité, le territoire, la mécanique, l&apos;infrastructure.</p>
             </motion.div>
           </motion.div>
           <a className="scroll-signal kv-scroll" href="#collection"><span>SCROLL TO EXPLORE</span><i /></a>
@@ -159,8 +168,8 @@ export default function HomeContent() {
       {/* Collection : la liste, équivalent de leur section Works. */}
       <section className="collection" id="collection">
         <header className="collection-head">
-          <small><DecryptedText text="COLLECTION / 004 ÉDITIONS" /></small>
-          <h2><SplitText>Quatre playbooks.{" "}<br /><em>Une seule discipline.</em></SplitText></h2>
+          <small><DecryptedText text="COLLECTION / 005 ÉDITIONS" /></small>
+          <h2><SplitText>Cinq playbooks.{" "}<br /><em>Une seule discipline.</em></SplitText></h2>
         </header>
         <ul className="edition-list">
           {EDITIONS.map((edition, index) => (
@@ -194,7 +203,7 @@ export default function HomeContent() {
       <section className="coverage" id="couverture">
         <header className="collection-head">
           <small><DecryptedText text="CE QUE COUVRE LA COLLECTION" /></small>
-          <h2><SplitText>Quatre couches.{" "}<br /><em>Dans cet ordre.</em></SplitText></h2>
+          <h2><SplitText>Cinq couches.{" "}<br /><em>Dans cet ordre.</em></SplitText></h2>
         </header>
         <div className="coverage-grid">
           {COUVERTURE.map(([titre, texte], index) => (
@@ -222,7 +231,7 @@ export default function HomeContent() {
 
       <footer className="global-footer">
         <a className="wordmark" href="#kv" aria-label="Mentalité Focus"><FocusLogo /></a>
-        <p>COLLECTION SEO · 4 ÉDITIONS · 2026</p>
+        <p>COLLECTION SEO · 5 ÉDITIONS · 2026</p>
         <a href="#kv">TOP ↑</a>
       </footer>
     </main>

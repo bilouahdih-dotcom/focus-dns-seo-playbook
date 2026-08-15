@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${origin}/seo-on-page`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-off-page`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-local`, changeFrequency: "monthly", priority: .9 },
+    { url: `${origin}/seo-technique`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-dns`, changeFrequency: "monthly", priority: .9 },
   ];
 }

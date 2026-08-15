@@ -22,7 +22,7 @@ async function render(path = "/") {
   );
 }
 
-const PLAYBOOKS = ["/seo-dns", "/seo-on-page", "/seo-off-page", "/seo-local"];
+const PLAYBOOKS = ["/seo-on-page", "/seo-off-page", "/seo-local", "/seo-technique", "/seo-dns"];
 
 /** Texte tel qu'un lecteur le voit : le split-text éclate les titres en un
  *  span par glyphe, donc chercher un mot dans le HTML brut ne donne rien. */
