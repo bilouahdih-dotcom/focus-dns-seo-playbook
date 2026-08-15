@@ -10,6 +10,8 @@ const chapters = [
   ["dnssec", "DNSSEC"], ["cdn", "CDN"], ["erreurs", "Erreurs"], ["checklist", "Checklist"],
 ] as const;
 
+type ChapterId = (typeof chapters)[number][0];
+
 const checks = [
   "Domaine principal défini", "Redirections configurées", "HTTPS forcé", "SSL valide",
   "DNS correctement configuré", "Aucun sous-domaine inutile exposé",
@@ -82,7 +84,7 @@ function Protocol({ kind, title, children }: { kind: "do" | "avoid" | "note"; ti
 }
 
 export default function Home() {
-  const [active, setActive] = useState("introduction");
+  const [active, setActive] = useState<ChapterId>("introduction");
   const [progress, setProgress] = useState(0);
   const [menu, setMenu] = useState(false);
   const [checked, setChecked] = useState<number[]>([]);
@@ -97,7 +99,7 @@ export default function Home() {
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0);
-      let current = chapters[0][0];
+      let current: ChapterId = chapters[0][0];
       for (const [id] of chapters) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= window.innerHeight * .42) current = id;
