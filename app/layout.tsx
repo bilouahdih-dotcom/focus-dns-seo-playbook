@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // Chaque playbook définit son propre titre ; celui-ci sert de repli.
     title: "Playbooks SEO — Mentalité Focus",
     description:
-      "Les playbooks SEO de Mentalité Focus : infrastructure DNS, optimisation on-page et autorité off-page.",
+      "Les playbooks SEO de Mentalité Focus : infrastructure DNS, optimisation on-page, autorité off-page et référencement local.",
     authors: [{ name: "Mentalité Focus" }],
     creator: "Mentalité Focus",
     publisher: "Mentalité Focus",

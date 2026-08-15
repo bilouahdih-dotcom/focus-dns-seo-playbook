@@ -22,7 +22,7 @@ async function render(path = "/") {
   );
 }
 
-const PLAYBOOKS = ["/seo-dns", "/seo-on-page", "/seo-off-page"];
+const PLAYBOOKS = ["/seo-dns", "/seo-on-page", "/seo-off-page", "/seo-local"];
 
 /** Texte tel qu'un lecteur le voit : le split-text éclate les titres en un
  *  span par glyphe, donc chercher un mot dans le HTML brut ne donne rien. */
@@ -48,7 +48,7 @@ test("l'accueil présente la collection", async () => {
   }
 });
 
-test("les trois playbooks répondent et portent leur propre titre", async () => {
+test("chaque playbook répond et porte son propre titre", async () => {
   const titres = [];
   for (const path of PLAYBOOKS) {
     const response = await render(path);

@@ -173,7 +173,7 @@ export default function SeoOffPage() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-offpage-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>L&apos;autorité ne s&apos;achète pas.{" "}<br/><em>Elle se construit, puis se garde.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-on-page">PLAYBOOK ON-PAGE <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>L&apos;autorité ne s&apos;achète pas.{" "}<br/><em>Elle se construit, puis se garde.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-local">PLAYBOOK LOCAL <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

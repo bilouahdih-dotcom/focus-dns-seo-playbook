@@ -35,14 +35,23 @@ const EDITIONS = [
     href: "/seo-off-page",
     title: "SEO off-page",
     line: "Construire une autorité qui se mérite, et qui tient dans le temps.",
-    tags: ["backlinks", "ancres", "marque", "local", "risques"],
+    tags: ["backlinks", "ancres", "marque", "notoriété", "risques"],
+  },
+  {
+    num: "014",
+    date: "2026 · 08",
+    href: "/seo-local",
+    title: "SEO local",
+    line: "Être trouvé dans sa ville : la carte, la fiche, les avis, les pages.",
+    tags: ["pack local", "fiche", "avis", "nap", "multi-adresses"],
   },
 ];
 
 const COUVERTURE = [
   ["INFRASTRUCTURE", "Ce qui doit être en place avant que la moindre page ne compte : résolution, chiffrement, canonique, disponibilité."],
   ["PAGE", "Ce que le moteur lit et comprend d'une page : intention, structure, contenu, balisage, vitesse ressentie."],
-  ["AUTORITÉ", "Ce que les autres disent de vous : liens éditoriaux, mentions de marque, présence locale, et les schémas à ne pas suivre."],
+  ["AUTORITÉ", "Ce que les autres disent de vous : liens éditoriaux, mentions de marque, et les schémas à ne pas suivre."],
+  ["TERRITOIRE", "Ce qui décide sur une recherche géolocalisée : la carte, la fiche d'établissement, les avis et les pages de lieu."],
 ];
 
 export default function HomeContent() {
@@ -115,7 +124,7 @@ export default function HomeContent() {
 
   return (
     <main className="studio-shell">
-      <Loader baseline="Trois playbooks. Une seule discipline." />
+      <Loader baseline="Quatre playbooks. Une seule discipline." />
       <DnsCrystal progress={kvProgress} pageProgress={pageProgress} enabled={!reduce} />
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
@@ -139,7 +148,7 @@ export default function HomeContent() {
               transition={{ duration: 1.25, ease: [.16, 1, .3, 1] }}>
               <div className="hero-kicker"><DecryptedText text="MENTALITÉ FOCUS / COLLECTION SEO" /><i /></div>
               <h1><SplitText delay={.25}><span>PLAYBOOKS</span>{" "}<br /><em>SEO</em></SplitText></h1>
-              <p className="kv-line">Trois guides opérationnels : l&apos;infrastructure, la page, l&apos;autorité.</p>
+              <p className="kv-line">Quatre guides opérationnels : l&apos;infrastructure, la page, l&apos;autorité, le territoire.</p>
             </motion.div>
           </motion.div>
           <a className="scroll-signal kv-scroll" href="#collection"><span>SCROLL TO EXPLORE</span><i /></a>
@@ -150,8 +159,8 @@ export default function HomeContent() {
       {/* Collection : la liste, équivalent de leur section Works. */}
       <section className="collection" id="collection">
         <header className="collection-head">
-          <small><DecryptedText text="COLLECTION / 003 ÉDITIONS" /></small>
-          <h2><SplitText>Trois playbooks.{" "}<br /><em>Une seule discipline.</em></SplitText></h2>
+          <small><DecryptedText text="COLLECTION / 004 ÉDITIONS" /></small>
+          <h2><SplitText>Quatre playbooks.{" "}<br /><em>Une seule discipline.</em></SplitText></h2>
         </header>
         <ul className="edition-list">
           {EDITIONS.map((edition, index) => (
@@ -185,7 +194,7 @@ export default function HomeContent() {
       <section className="coverage" id="couverture">
         <header className="collection-head">
           <small><DecryptedText text="CE QUE COUVRE LA COLLECTION" /></small>
-          <h2><SplitText>Trois couches.{" "}<br /><em>Dans cet ordre.</em></SplitText></h2>
+          <h2><SplitText>Quatre couches.{" "}<br /><em>Dans cet ordre.</em></SplitText></h2>
         </header>
         <div className="coverage-grid">
           {COUVERTURE.map(([titre, texte], index) => (
@@ -213,7 +222,7 @@ export default function HomeContent() {
 
       <footer className="global-footer">
         <a className="wordmark" href="#kv" aria-label="Mentalité Focus"><FocusLogo /></a>
-        <p>COLLECTION SEO · 3 ÉDITIONS · 2026</p>
+        <p>COLLECTION SEO · 4 ÉDITIONS · 2026</p>
         <a href="#kv">TOP ↑</a>
       </footer>
     </main>

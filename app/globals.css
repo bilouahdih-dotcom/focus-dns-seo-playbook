@@ -114,7 +114,8 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .manifesto p{position:relative;max-width:620px;margin:0;color:#3f3003;font-size:14px}
 
 .coverage{position:relative;z-index:1;padding:clamp(90px,11vw,150px) 6vw clamp(90px,11vw,150px) 8vw;background:rgba(3,3,3,.93)}
-.coverage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-medium);border:1px solid var(--border-medium)}
+.coverage-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border-medium);border:1px solid var(--border-medium)}
+@media(max-width:1200px){.coverage-grid{grid-template-columns:repeat(2,1fr)}}
 .coverage-grid article{min-height:280px;padding:30px;display:flex;flex-direction:column;background:var(--bg-card)}
 .coverage-grid span{color:var(--gold);font:700 13px/1 var(--font-geist-mono)}
 .coverage-grid h3{margin:auto 0 12px;font:600 13px/1 var(--font-geist-mono);letter-spacing:.14em;color:var(--text-primary)}
@@ -154,9 +155,9 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 .global-footer .footer-links{display:flex;gap:22px;align-items:center}
 .global-footer .footer-links a{color:var(--text-light);font:600 12px/1 var(--font-geist-mono);letter-spacing:.12em;transition:color .3s var(--ease)}
 .global-footer .footer-links a:hover{color:var(--gold)}
-/* Trois éditions ne tiennent pas en largeur sur petit écran : on garde les
-   numéros, qui suffisent à se repérer une fois la collection connue. */
-@media(max-width:1100px){.edition-switch a b{display:none}.edition-switch a{padding:9px 12px}}
+/* Le groupe s'allonge à chaque édition : sous 1300px on garde les numéros,
+   qui suffisent à se repérer une fois la collection connue. */
+@media(max-width:1300px){.edition-switch a b{display:none}.edition-switch a{padding:9px 12px}}
 @media(max-width:800px){.edition-switch{right:auto;left:52px;top:88px}}
 
 /* Shared technical grid */

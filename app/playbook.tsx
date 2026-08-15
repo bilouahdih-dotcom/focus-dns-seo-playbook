@@ -169,7 +169,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
   navLinks: readonly (readonly [string, string])[];
   action: readonly [string, string];
   /** Playbook affiché, pour le sélecteur d'édition. */
-  current: "dns" | "on-page" | "off-page";
+  current: "dns" | "on-page" | "off-page" | "local";
   edition: string;
   /** Phrase de l'écran d'entrée : elle doit annoncer le playbook affiché. */
   baseline: string;
@@ -296,6 +296,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
         <Link href="/seo-dns" className={current === "dns" ? "active" : ""}><span>011</span><b>DNS &amp; Infrastructure</b></Link>
         <Link href="/seo-on-page" className={current === "on-page" ? "active" : ""}><span>012</span><b>SEO on-page</b></Link>
         <Link href="/seo-off-page" className={current === "off-page" ? "active" : ""}><span>013</span><b>SEO off-page</b></Link>
+        <Link href="/seo-local" className={current === "local" ? "active" : ""}><span>014</span><b>SEO local</b></Link>
       </nav>
 
       <aside className={`chapter-rail ${menu ? "open" : ""}`} aria-label="Sommaire">
