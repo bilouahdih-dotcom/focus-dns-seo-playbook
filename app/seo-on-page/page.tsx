@@ -180,7 +180,7 @@ export default function SeoOnPage() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-onpage-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 012</span><h3>Une page optimisée ne bat pas une page utile.{" "}<br/><em>Elle la rend trouvable.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/">PLAYBOOK DNS <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 012</span><h3>Une page optimisée ne bat pas une page utile.{" "}<br/><em>Elle la rend trouvable.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-off-page">PLAYBOOK OFF-PAGE <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

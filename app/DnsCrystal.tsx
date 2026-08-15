@@ -250,7 +250,11 @@ export default function DnsCrystal({ progress, pageProgress, enabled }: {
         // Le logo passe du premier plan (hero) au fond de page : il rapetisse,
         // glisse vers la gauche et descend, pour laisser le texte lisible.
         crystal.scale.setScalar(mix(.56, .84, hero) * mix(1, .46, after) + Math.sin(elapsed * .8) * .008);
-        crystal.position.x = mix(1.55, -1.15, after);
+        /* Position latérale calée sur le format de l'écran : une valeur fixe
+           sortait du cadre sur les fenêtres étroites, où le logo se retrouvait
+           coupé au bord droit. */
+        const marge = Math.max(.55, Math.min(1.55, camera.aspect * .92));
+        crystal.position.x = mix(marge, -marge * .74, after);
         crystal.position.y = mix(.12, -.35, hero) + after * .55;
         crystal.position.z = mix(0, -2.2, after);
         (edges.material as import("three").LineBasicMaterial).opacity = mix(.5, .16, p);

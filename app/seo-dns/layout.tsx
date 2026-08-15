@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: DESCRIPTION,
     // Le guide explique qu'un domaine doit exposer une seule version
     // indexable : autant l'appliquer à lui-même.
-    alternates: { canonical: "/" },
+    alternates: { canonical: "/seo-dns" },
     keywords: [
       "DNS", "SEO", "DNSSEC", "HTTPS", "redirection 301", "canonique",
       "sous-domaine", "CDN", "Cloudflare", "Google Search Console",
@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: DESCRIPTION,
       type: "article",
       locale: "fr_FR",
-      url: baseUrl,
+      url: `${baseUrl}/seo-dns`,
       siteName: "Mentalité Focus",
       images: [{ url: `${baseUrl}/og.png`, width: 1792, height: 1024, alt: TITLE }],
     },
@@ -61,7 +61,7 @@ export default async function DnsLayout({ children }: { children: React.ReactNod
       <StructuredData
         baseUrl={baseUrl}
         playbook={{
-          path: "/",
+          path: "/seo-dns",
           title: TITLE,
           description: DESCRIPTION,
           chapters: CHAPTERS,

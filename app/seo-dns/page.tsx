@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import Link from "next/link";
 import { PlaybookShell, Scene, SpotlightCard, Protocol } from "../playbook";
 
 const chapters = [
@@ -161,7 +162,7 @@ export default function Home() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-dns-audit-v2')}catch{/* stockage facultatif */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Le DNS ne promet pas la première place.{" "}<br/><em>Il évite de partir avec un handicap.</em></h3><motion.a href="#introduction" whileHover={{y:-5}}>RESTART <i>↑</i></motion.a></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Le DNS ne promet pas la première place.{" "}<br/><em>Il évite de partir avec un handicap.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-on-page">PLAYBOOK ON-PAGE <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

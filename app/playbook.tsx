@@ -290,7 +290,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       {/* Sélecteur d'édition : les playbooks sont les entrées d'une même
           collection, on passe de l'un à l'autre sans repasser par un accueil. */}
       <nav className="edition-switch" aria-label="Choisir un playbook">
-        <Link href="/" className={current === "dns" ? "active" : ""}><span>011</span><b>DNS &amp; Infrastructure</b></Link>
+        <Link href="/seo-dns" className={current === "dns" ? "active" : ""}><span>011</span><b>DNS &amp; Infrastructure</b></Link>
         <Link href="/seo-on-page" className={current === "on-page" ? "active" : ""}><span>012</span><b>SEO on-page</b></Link>
         <Link href="/seo-off-page" className={current === "off-page" ? "active" : ""}><span>013</span><b>SEO off-page</b></Link>
       </nav>
