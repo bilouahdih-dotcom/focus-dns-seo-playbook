@@ -4,16 +4,24 @@ import { useEffect, useRef, useState } from "react";
 import type { MotionValue } from "motion/react";
 
 /**
- * Cristal DNS en WebGL — la mécanique du visuel d'alche.studio :
+ * Le "F" de Focus en WebGL — la mécanique du visuel d'alche.studio :
  * MeshPhysicalMaterial (transmission + iridescence + clearcoat) sur une
- * environment map passée au PMREMGenerator. La matière change avec le scroll :
- * verre sombre -> or massif -> chrome irisé.
+ * environment map passée au PMREMGenerator, et un canvas plein écran fixe qui
+ * persiste derrière toute la page, comme leur `Layout__gl_inner`.
  *
- * Three.js n'est chargé qu'au montage côté client (~600 kB) : le prisme CSS
+ * Deux pilotes de scroll : `progress` couvre le hero (matière et cadrage
+ * plein écran), `pageProgress` couvre le reste du document (le logo recule
+ * en fond de page et continue de tourner).
+ *
+ * Three.js n'est chargé qu'au montage côté client (~700 kB) : le prisme CSS
  * reste affiché tant que le canvas n'a pas pris le relais, et le reste si le
  * navigateur n'a pas WebGL ou si l'utilisateur refuse les animations.
  */
-export default function DnsCrystal({ progress, enabled }: { progress: MotionValue<number>; enabled: boolean }) {
+export default function DnsCrystal({ progress, pageProgress, enabled }: {
+  progress: MotionValue<number>;
+  pageProgress: MotionValue<number>;
+  enabled: boolean;
+}) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [live, setLive] = useState(false);
 
@@ -48,12 +56,18 @@ export default function DnsCrystal({ progress, enabled }: { progress: MotionValu
       camera.position.set(0, 0, 6.2);
 
       const size = () => {
+        // Mesure du conteneur, pas de window.innerWidth : ce dernier inclut la
+        // barre de défilement, ce qui étirerait l'image de quelques pixels.
         const rect = host.getBoundingClientRect();
-        const width = Math.max(1, rect.width);
-        const height = Math.max(1, rect.height);
-        // Plafond plus bas sur petit écran : le rendu tourne en continu et
-        // pèse sur la batterie.
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, width < 800 ? 1.25 : 1.5));
+        const width = Math.max(1, Math.round(rect.width));
+        const height = Math.max(1, Math.round(rect.height));
+        /* Le canvas couvre désormais l'écran entier et tourne sur toute la
+           page : le plafond de résolution compte double. On vise ~2 Mpx, ce
+           qui suffit largement pour un objet réfléchissant. */
+        const budget = 2_100_000;
+        const cap = width < 800 ? 1.25 : 1.5;
+        const ratio = Math.min(window.devicePixelRatio, cap, Math.sqrt(budget / (width * height)));
+        renderer.setPixelRatio(Math.max(1, ratio));
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
@@ -162,11 +176,16 @@ export default function DnsCrystal({ progress, enabled }: { progress: MotionValu
 
       const mix = (from: number, to: number, t: number) => from + (to - from) * t;
       // Trois états de matière traversés par le scroll.
+      /* La matière traverse tout le document : les trois premiers états sont
+         parcourus pendant le hero, les suivants pendant la lecture. */
       const stages = [
         // chrome froid -> or massif -> cristal irisé
         { at: 0,   transmission: .10, metalness: .95, roughness: .06, iridescence: .60, thickness: 1.4, color: "#ffffff" },
-        { at: .55, transmission: 0,   metalness: 1,   roughness: .19, iridescence: .10, thickness: 1.1, color: "#e8c766" },
-        { at: 1,   transmission: .22, metalness: .88, roughness: .03, iridescence: 1,   thickness: 2.4, color: "#ffffff" },
+        { at: .28, transmission: 0,   metalness: 1,   roughness: .19, iridescence: .10, thickness: 1.1, color: "#e8c766" },
+        { at: .50, transmission: .22, metalness: .88, roughness: .03, iridescence: 1,   thickness: 2.4, color: "#ffffff" },
+        // fond de page : plus sombre et plus mat, pour rester sous le texte
+        { at: .75, transmission: .05, metalness: .98, roughness: .30, iridescence: .35, thickness: 1.0, color: "#c9a227" },
+        { at: 1,   transmission: .12, metalness: .92, roughness: .12, iridescence: .85, thickness: 1.8, color: "#efe7d2" },
       ];
       const colorFrom = new THREE.Color();
       const colorTo = new THREE.Color();
@@ -185,33 +204,51 @@ export default function DnsCrystal({ progress, enabled }: { progress: MotionValu
         material.color.copy(colorFrom.set(a.color).lerp(colorTo.set(b.color), t));
       };
 
-      let visible = true;
-      const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
-      observer.observe(host);
+      // Le canvas couvre l'écran en permanence : on suspend le rendu quand
+      // l'onglet passe en arrière-plan plutôt que sur l'intersection.
+      let visible = !document.hidden;
+      const onVisibility = () => { visible = !document.hidden; };
+      document.addEventListener("visibilitychange", onVisibility);
 
       let frame = 0;
       const start = performance.now();
       const render = (now: number) => {
         frame = requestAnimationFrame(render);
         if (!visible) return;
-        const p = Math.min(1, Math.max(0, progress.get()));
+        const hero = Math.min(1, Math.max(0, progress.get()));
+        const after = Math.min(1, Math.max(0, pageProgress.get()));
+        // Une seule ligne de temps : le hero occupe la première moitié,
+        // la lecture du document la seconde.
+        const p = after > 0 ? .5 + after * .5 : hero * .5;
         const elapsed = (now - start) / 1000;
         applyMaterial(p);
-        crystal.rotation.y = p * Math.PI * 2.1 + elapsed * .13;
-        crystal.rotation.x = Math.sin(p * Math.PI) * .5 - .12;
-        crystal.rotation.z = p * .5;
-        crystal.scale.setScalar(mix(.56, .84, p) + Math.sin(elapsed * .8) * .008);
-        crystal.position.y = mix(.12, -.35, p);
+
+        crystal.rotation.y = hero * Math.PI * 2.1 + after * Math.PI * 2.6 + elapsed * .13;
+        crystal.rotation.x = Math.sin(hero * Math.PI) * .5 - .12 + after * .8;
+        crystal.rotation.z = hero * .5 - after * .55;
+        // Le logo passe du premier plan (hero) au fond de page : il rapetisse,
+        // glisse vers la gauche et descend, pour laisser le texte lisible.
+        crystal.scale.setScalar(mix(.56, .84, hero) * mix(1, .46, after) + Math.sin(elapsed * .8) * .008);
+        crystal.position.x = mix(1.55, -1.15, after);
+        crystal.position.y = mix(.12, -.35, hero) + after * .55;
+        crystal.position.z = mix(0, -2.2, after);
         (edges.material as import("three").LineBasicMaterial).opacity = mix(.5, .16, p);
         renderer.render(scene, camera);
       };
       frame = requestAnimationFrame(render);
 
+      /* ResizeObserver et pas seulement l'évènement `resize` : au retrait du
+         voile d'entrée la barre de défilement réapparaît et rétrécit le
+         conteneur de quelques pixels sans qu'aucun `resize` ne soit émis —
+         l'image resterait légèrement étirée. */
+      const observer = new ResizeObserver(size);
+      observer.observe(host);
       window.addEventListener("resize", size);
       setLive(true);
 
       cleanup = () => {
         cancelAnimationFrame(frame);
+        document.removeEventListener("visibilitychange", onVisibility);
         observer.disconnect();
         window.removeEventListener("resize", size);
         renderer.domElement.remove();
@@ -231,7 +268,7 @@ export default function DnsCrystal({ progress, enabled }: { progress: MotionValu
       cleanup?.();
       setLive(false);
     };
-  }, [enabled, progress]);
+  }, [enabled, progress, pageProgress]);
 
   return <div ref={hostRef} className={`dns-crystal ${live ? "is-live" : ""}`} aria-hidden="true" />;
 }

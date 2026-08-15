@@ -167,6 +167,11 @@ export default function Home() {
   const rawHeroProgress = useTransform(scrollY, heroRange, [0, 1], { clamp: true });
   // Spring serré : le hero doit suivre le scroll, pas flotter derrière lui.
   const heroProgress = useSpring(rawHeroProgress, { stiffness: 240, damping: 38, mass: .2 });
+  // Avancée dans le reste du document, une fois le hero passé : elle pilote le
+  // canvas de fond sur les douze scènes.
+  const [pageRange, setPageRange] = useState<[number, number]>([0, 1]);
+  const rawPageProgress = useTransform(scrollY, pageRange, [0, 1], { clamp: true });
+  const pageProgress = useSpring(rawPageProgress, { stiffness: 160, damping: 40, mass: .3 });
 
   // Smooth scroll inertiel (alche.studio tourne sur Lenis). Il pilote aussi
   // les ancres, sinon `scroll-behavior:smooth` et Lenis se disputent le scroll.
@@ -203,6 +208,9 @@ export default function Home() {
       if (!el) return;
       const travel = Math.max(1, el.offsetHeight - window.innerHeight);
       setHeroRange([el.offsetTop, el.offsetTop + travel]);
+      // Du bas du hero jusqu'au bas du document.
+      const end = Math.max(el.offsetTop + travel + 1, document.documentElement.scrollHeight - window.innerHeight);
+      setPageRange([el.offsetTop + travel, end]);
     };
     measure();
     window.addEventListener("resize", measure);
@@ -259,6 +267,10 @@ export default function Home() {
   return (
     <main className="studio-shell">
       <Loader />
+      {/* Canvas persistant, comme le `Layout__gl_inner` d'alche.studio : fixe
+          derrière toute la page, il traverse les scènes au lieu de s'arrêter
+          avec le hero. */}
+      <DnsCrystal progress={heroProgress} pageProgress={pageProgress} enabled={!reduce} />
       <div className="read-line" aria-hidden="true"><i style={{ width: `${progress}%` }} /></div>
 
       <header className="global-header">
@@ -285,7 +297,6 @@ export default function Home() {
             <div className="prism-outline"><b>site.fr</b></div>
             <div className="prism-shadow"/>
           </motion.div>
-          <DnsCrystal progress={heroProgress} enabled={!reduce} />
           {/* Couche scroll (MotionValues) et couche d'entrée (animate) séparées :
               les cumuler sur le même élément fait s'écraser opacity / y. */}
           <motion.div className="hero-content" style={{ opacity: heroCopyOpacity, y: heroCopyY }}>
