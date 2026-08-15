@@ -178,10 +178,15 @@ export default function DnsCrystal({ progress, pageProgress, enabled }: {
       // Trois états de matière traversés par le scroll.
       /* La matière traverse tout le document : les trois premiers états sont
          parcourus pendant le hero, les suivants pendant la lecture. */
+      /* Aucune valeur ne descend à zéro : Three.js compile un programme
+         différent selon que `transmission` et `iridescence` valent 0 ou non
+         (defines USE_TRANSMISSION / USE_IRIDESCENCE). Traverser zéro pendant
+         le scroll recompile le shader en pleine animation et fige l'image.
+         On garde donc un plancher de .02, visuellement identique à 0. */
       const stages = [
         // chrome froid -> or massif -> cristal irisé
         { at: 0,   transmission: .10, metalness: .95, roughness: .06, iridescence: .60, thickness: 1.4, color: "#ffffff" },
-        { at: .28, transmission: 0,   metalness: 1,   roughness: .19, iridescence: .10, thickness: 1.1, color: "#e8c766" },
+        { at: .28, transmission: .02, metalness: 1,   roughness: .19, iridescence: .10, thickness: 1.1, color: "#e8c766" },
         { at: .50, transmission: .22, metalness: .88, roughness: .03, iridescence: 1,   thickness: 2.4, color: "#ffffff" },
         // fond de page : plus sombre et plus mat, pour rester sous le texte
         { at: .75, transmission: .05, metalness: .98, roughness: .30, iridescence: .35, thickness: 1.0, color: "#c9a227" },
@@ -212,19 +217,27 @@ export default function DnsCrystal({ progress, pageProgress, enabled }: {
 
       let frame = 0;
       let lastDraw = 0;
+      let lastMove = performance.now();
+      let lastHero = -1;
+      let lastAfter = -1;
       const start = performance.now();
       const render = (now: number) => {
         frame = requestAnimationFrame(render);
         if (!visible) return;
         const heroValue = Math.min(1, Math.max(0, progress.get()));
-        /* Plein régime tant que le hero pilote la scène ; au-delà le logo n'est
-           qu'un fond derrière le texte, 30 images/s suffisent et libèrent la
-           moitié du budget GPU pour le scroll. */
-        const interval = heroValue < 1 ? 0 : 33;
-        if (now - lastDraw < interval) return;
+        const afterValue = Math.min(1, Math.max(0, pageProgress.get()));
+        /* Cadence adaptative : plein régime dès que le scroll fait bouger
+           quelque chose, ralenti seulement à l'arrêt, où seule la rotation de
+           fond tourne. Un plafond fixe hachait visiblement le mouvement. */
+        const bouge = Math.abs(heroValue - lastHero) > .0002 || Math.abs(afterValue - lastAfter) > .0002;
+        lastHero = heroValue;
+        lastAfter = afterValue;
+        if (bouge) lastMove = now;
+        const auRepos = now - lastMove > 400;
+        if (auRepos && now - lastDraw < 40) return;
         lastDraw = now;
         const hero = heroValue;
-        const after = Math.min(1, Math.max(0, pageProgress.get()));
+        const after = afterValue;
         // Une seule ligne de temps : le hero occupe la première moitié,
         // la lecture du document la seconde.
         const p = after > 0 ? .5 + after * .5 : hero * .5;
