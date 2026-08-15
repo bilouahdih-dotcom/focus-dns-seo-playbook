@@ -7,8 +7,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const protocol = headerStore.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
 
-  /* Le playbook tient sur une seule URL : le sitemap ne déclare donc que
-     celle-ci. Les chapitres sont des ancres, pas des pages — les lister
-     reviendrait à déclarer des doublons de la même URL. */
-  return [{ url: origin, changeFrequency: "monthly", priority: 1 }];
+  /* Une entrée par playbook. Les chapitres sont des ancres, pas des pages :
+     les lister reviendrait à déclarer des doublons de la même URL. */
+  return [
+    { url: origin, changeFrequency: "monthly", priority: 1 },
+    { url: `${origin}/seo-on-page`, changeFrequency: "monthly", priority: .9 },
+  ];
 }
