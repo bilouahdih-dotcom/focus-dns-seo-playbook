@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { PlaybookShell, Scene, SpotlightCard, Protocol } from "./playbook";
+import { PlaybookShell, Scene, SpotlightCard, Protocol } from "../playbook";
 
 const chapters = [
   ["introduction", "Intro"], ["lien", "DNS / SEO"], ["domaine", "Domaine"],
