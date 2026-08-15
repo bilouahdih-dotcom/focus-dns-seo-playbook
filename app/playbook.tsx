@@ -279,7 +279,9 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
       <header className="global-header">
-        <a className="wordmark" href="#introduction" aria-label="Mentalité Focus — accueil"><FocusLogo /></a>
+        {/* Le logo ramène à la collection, comme partout ailleurs sur le web ;
+            le retour en haut de page reste le rôle du lien du pied. */}
+        <Link className="wordmark" href="/" aria-label="Mentalité Focus — retour à l'accueil"><FocusLogo /></Link>
         <nav aria-label="Navigation principale">
           {navLinks.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
         </nav>
@@ -290,6 +292,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       {/* Sélecteur d'édition : les playbooks sont les entrées d'une même
           collection, on passe de l'un à l'autre sans repasser par un accueil. */}
       <nav className="edition-switch" aria-label="Choisir un playbook">
+        <Link href="/" className="edition-home"><span aria-hidden="true">↖</span><b>Collection</b></Link>
         <Link href="/seo-dns" className={current === "dns" ? "active" : ""}><span>011</span><b>DNS &amp; Infrastructure</b></Link>
         <Link href="/seo-on-page" className={current === "on-page" ? "active" : ""}><span>012</span><b>SEO on-page</b></Link>
         <Link href="/seo-off-page" className={current === "off-page" ? "active" : ""}><span>013</span><b>SEO off-page</b></Link>
@@ -341,9 +344,12 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       {children}
 
       <footer className="global-footer">
-        <a className="wordmark" href="#introduction" aria-label="Mentalité Focus"><FocusLogo /></a>
+        <Link className="wordmark" href="/" aria-label="Mentalité Focus — retour à l'accueil"><FocusLogo /></Link>
         <p>{edition}</p>
-        <a href="#introduction">TOP ↑</a>
+        <span className="footer-links">
+          <Link href="/">← Collection</Link>
+          <a href="#introduction">TOP ↑</a>
+        </span>
       </footer>
     </main>
   );
