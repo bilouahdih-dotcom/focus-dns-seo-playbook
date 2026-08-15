@@ -28,18 +28,26 @@ const scrambleGlyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.-";
 function DecryptedText({ text }: { text: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
-  const [display, setDisplay] = useState(text.replace(/[^ ]/g, "·"));
+  /* Le texte réel est rendu côté serveur, pas la version brouillée : les
+     moteurs lisaient sinon des points à la place des intertitres, le vrai
+     libellé n'existant que dans l'aria-label. Le brouillage ne commence qu'au
+     premier passage à l'écran, donc il n'est jamais vu en clair avant. */
+  const [display, setDisplay] = useState(text);
 
   useEffect(() => {
     if (!inView) return;
     let frame = 0;
-    const timer = window.setInterval(() => {
+    const step = () => {
       setDisplay(text.split("").map((char, index) => {
         if (char === " ") return " ";
         if (index < frame / 2) return char;
         return scrambleGlyphs[Math.floor(Math.random() * scrambleGlyphs.length)];
       }).join(""));
       frame += 1;
+    };
+    step(); // brouille immédiatement, sans laisser voir le texte net
+    const timer = window.setInterval(() => {
+      step();
       if (frame > text.length * 2 + 4) {
         window.clearInterval(timer);
         setDisplay(text);
@@ -48,7 +56,7 @@ function DecryptedText({ text }: { text: string }) {
     return () => window.clearInterval(timer);
   }, [inView, text]);
 
-  return <span ref={ref} className="decrypt" aria-label={text}><span aria-hidden="true">{display}</span></span>;
+  return <span ref={ref} className="decrypt">{display}</span>;
 }
 
 /* Titre découpé caractère par caractère, révélé en cascade — la mécanique
@@ -59,7 +67,8 @@ function SplitText({ children, className = "", delay = 0 }: { children: React.Re
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-12%" });
 
-  // Le contenu peut contenir des <br/> et des <em> : on ne découpe que le texte.
+  // Le contenu peut contenir des sauts de ligne et des <em> : on ne découpe
+  // que les chaînes de texte.
   let charIndex = 0;
   const split = (node: React.ReactNode): React.ReactNode => {
     if (typeof node === "string") {
@@ -314,7 +323,7 @@ export default function Home() {
             <motion.div className="hero-intro" initial={reduce ? false : {opacity:0,y:36}}
               animate={{opacity:1,y:0}} transition={{duration:1.25,ease:[.16,1,.3,1]}}>
               <div className="hero-kicker"><DecryptedText text="PLAYBOOK 011 / SEO INFRASTRUCTURE"/><i/></div>
-              <h1><SplitText delay={.25}><span>DNS / SEO</span><br/><em>INFRASTRUCTURE</em><br/>PLAYBOOK</SplitText></h1>
+              <h1><SplitText delay={.25}><span>DNS / SEO</span>{" "}<br/><em>INFRASTRUCTURE</em>{" "}<br/>PLAYBOOK</SplitText></h1>
               <div className="hero-brief"><p>Construire une infrastructure <strong>stable, rapide, sûre et canonique</strong> pour ne jamais laisser le DNS affaiblir le SEO.</p><motion.a href="#lien" whileHover={{x:7}}>Entrer dans le système <i>↘</i></motion.a></div>
             </motion.div>
           </motion.div>
@@ -327,7 +336,7 @@ export default function Home() {
       </section>
 
       <Scene id="lien" index="02" eyebrow="DNS × SEO / THE REAL LINK" tone="dark"
-        title={<>Le DNS ne vous classe pas.<br/><em>Il sécurise le terrain.</em></>}
+        title={<>Le DNS ne vous classe pas.{" "}<br/><em>Il sécurise le terrain.</em></>}
         description="Il ne crée pas d’autorité éditoriale. Il évite les défaillances techniques qui ralentissent, fragmentent ou rendent le site indisponible.">
         <div className="manifesto-line"><span>STABILITÉ</span><i>×</i><span>SÉCURITÉ</span><i>×</i><span>VITESSE</span><i>×</i><span>COHÉRENCE</span></div>
         <div className="impact-matrix">
@@ -337,7 +346,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="domaine" index="03" eyebrow="CANONICAL ARCHITECTURE" tone="light"
-        title={<>Trois entrées.<br/><em>Une seule destination.</em></>}
+        title={<>Trois entrées.{" "}<br/><em>Une seule destination.</em></>}
         description="Choisissez site.fr ou www.site.fr, puis redirigez définitivement toutes les autres variantes vers cette version principale.">
         <div className="canonical-stage">
           <div className="incoming-routes"><small>INPUT / VARIANTS</small><code><i/>http://site.fr</code><code><i/>http://www.site.fr</code><code><i/>https://www.site.fr</code></div>
@@ -348,7 +357,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="records" index="04" eyebrow="DNS RECORD SYSTEM" tone="dark"
-        title={<>A. AAAA. CNAME.<br/><em>Trois rôles précis.</em></>}
+        title={<>A. AAAA. CNAME.{" "}<br/><em>Trois rôles précis.</em></>}
         description="Une zone courte, explicite et documentée se résout plus facilement et se diagnostique plus vite.">
         <div className="record-system">
           {[['A','IPv4','@','192.0.2.10','Domaine → adresse IPv4'],['AAAA','IPv6','@','2001:db8::10','Domaine → adresse IPv6'],['CNAME','ALIAS','www','site.fr.','Alias → autre nom DNS']].map(([type,meta,name,value,desc])=><SpotlightCard key={type} className="record-module"><header><span>{type}</span><small>{meta}</small></header><h3>{desc}</h3><div><code>{name}</code><i>→</i><code>{value}</code></div><footer>TTL / AUTO</footer></SpotlightCard>)}
@@ -358,7 +367,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="https" index="05" eyebrow="TRANSPORT SECURITY" tone="gold"
-        title={<>Chiffrer tout.<br/><em>Rediriger toujours.</em></>}
+        title={<>Chiffrer tout.{" "}<br/><em>Rediriger toujours.</em></>}
         description="Chaque requête HTTP doit basculer vers HTTPS, et le certificat doit rester valide pour tous les noms réellement utilisés.">
         <div className="ssl-stage">
           <div className="ssl-seal"><div><span>SSL</span><b>VALID</b><small>TRUSTED CHAIN</small></div></div>
@@ -368,7 +377,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="subdomains" index="06" eyebrow="SUBDOMAIN EXPOSURE MAP" tone="light"
-        title={<>Tout ce qui existe<br/><em>doit être assumé.</em></>}
+        title={<>Tout ce qui existe{" "}<br/><em>doit être assumé.</em></>}
         description="Un sous-domaine oublié peut être indexé, exposer une copie du site ou devenir un point d’entrée vulnérable.">
         <div className="exposure-table"><header><span>HOSTNAME</span><span>ENVIRONMENT</span><span>RISK</span><span>ACTION</span></header>
           {[['dev.site.fr','DEVELOPMENT','HIGH','SUPPRIMER / FILTRER'],['test.site.fr','QA TEST','HIGH','AUTHENTIFIER'],['staging.site.fr','PREPROD','MEDIUM','NOINDEX + AUTH'],['blog.site.fr','PRODUCTION','LOW','CONSERVER SI UTILE']].map(([host,env,risk,action])=><div key={host} className={`risk-${risk.toLowerCase()}`}><code><i/>{host}</code><span>{env}</span><b>{risk}</b><strong>{action}</strong></div>)}
@@ -377,7 +386,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="cloudflare" index="07" eyebrow="ANYCAST / EDGE NETWORK" tone="dark"
-        title={<>Répondre partout.<br/><em>Sans point faible.</em></>}
+        title={<>Répondre partout.{" "}<br/><em>Sans point faible.</em></>}
         description="Un DNS rapide et fiable comme Cloudflare réduit la latence de résolution et limite les risques d’indisponibilité.">
         <div className="network-radar">
           <div className="radar-core"><span>CF</span><b>CLOUDFLARE</b><small>EXAMPLE PROVIDER</small></div>
@@ -389,7 +398,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="search-console" index="08" eyebrow="DOMAIN OWNERSHIP / GOOGLE" tone="light"
-        title={<>Prouver le domaine.<br/><em>Couvrir toutes ses versions.</em></>}
+        title={<>Prouver le domaine.{" "}<br/><em>Couvrir toutes ses versions.</em></>}
         description="La propriété Domaine de Google Search Console regroupe protocoles et sous-domaines dans une seule vérification TXT.">
         <div className="verification-stage">
           <ol>{[['01','Créer une propriété Domaine'],['02','Copier la valeur TXT'],['03','Publier le TXT à la racine'],['04','Vérifier puis conserver le record']].map(([n,t])=><li key={n}><span>{n}</span><b>{t}</b></li>)}</ol>
@@ -399,7 +408,7 @@ export default function Home() {
       </Scene>
 
       <Scene id="dnssec" index="09" eyebrow="CHAIN OF TRUST" tone="dark"
-        title={<>Signer la réponse.<br/><em>Garantir son origine.</em></>}
+        title={<>Signer la réponse.{" "}<br/><em>Garantir son origine.</em></>}
         description="DNSSEC permet au résolveur de vérifier que la réponse DNS reçue est authentique et n’a pas été altérée.">
         <div className="trust-route">{[['01','REGISTRY','.FR'],['02','REGISTRAR','DS RECORD'],['03','AUTH DNS','SIGNED ZONE'],['✓','RESOLVER','VALIDATED']].map(([n,t,m],i)=><div key={t} className={i===3?'verified':''}><span>{n}</span><b>{t}</b><small>{m}</small>{i < 3 ? <i>→</i> : null}</div>)}</div>
         <div className="trust-notes"><SpotlightCard><span>ACTIVATION</span><h3>Signer chez le DNS</h3><p>Activez la zone signée, puis publiez le DS demandé chez le registrar si la liaison n’est pas automatique.</p></SpotlightCard><SpotlightCard><span>MIGRATION</span><h3>Changer dans le bon ordre</h3><p>Un ancien DS associé à de nouvelles clés peut rendre tout le domaine inaccessible.</p></SpotlightCard></div>
@@ -407,21 +416,21 @@ export default function Home() {
       </Scene>
 
       <Scene id="cdn" index="10" eyebrow="CONTENT DELIVERY NETWORK" tone="light"
-        title={<>Rapprocher le contenu.<br/><em>Absorber la distance.</em></>}
+        title={<>Rapprocher le contenu.{" "}<br/><em>Absorber la distance.</em></>}
         description="Un CDN sert les fichiers depuis un point proche du visiteur, réduit la charge de l’origine et absorbe les pics.">
         <div className="cdn-globe"><div className="globe-core"><small>ORIGIN</small><strong>PARIS</strong></div>{[['YUL','MONTRÉAL'],['DKR','DAKAR'],['SIN','SINGAPOUR']].map(([code,city],i)=><div key={code} className={`pop pop${i+1}`}><i/><span>EDGE / {code}</span><b>{city}</b></div>)}<span className="arc arc1"/><span className="arc arc2"/><span className="arc arc3"/></div>
         <div className="cdn-decisions">{[['PERTINENT SI','Audience internationale','Images et assets lourds','Pics de trafic'],['RÉGLER','Cache HTML','Purge après publication','Pages personnalisées'],['MESURER','TTFB et latence DNS','Taux de cache HIT','Disponibilité origine']].map(([t,...items])=><SpotlightCard key={t}><span>{t}</span>{items.map(item=><p key={item}>↳ {item}</p>)}</SpotlightCard>)}</div>
       </Scene>
 
       <Scene id="erreurs" index="11" eyebrow="ANTI-PATTERN DATABASE" tone="danger"
-        title={<>Les faux raccourcis<br/><em>coûtent toujours plus cher.</em></>}
+        title={<>Les faux raccourcis{" "}<br/><em>coûtent toujours plus cher.</em></>}
         description="Une zone DNS simple est plus facile à sécuriser, migrer, surveiller et réparer.">
         <div className="anti-grid">{[['01','Sous-domaines en masse','Ils n’ajoutent aucune autorité.'],['02','CNAME “pour le SEO”','Un alias ne crée pas de classement.'],['03','Staging indexable','Il expose doublons et données.'],['04','Versions en parallèle','Les signaux sont fragmentés.'],['05','Cibles orphelines','Elles cassent ou se détournent.'],['06','Migration sans rollback','TTL et ordre doivent être planifiés.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>ABORT</b></SpotlightCard>)}</div>
         <div className="red-rule"><span>RULE / 011</span><p>N’utilisez jamais des dizaines de sous-domaines ou de CNAME pour manipuler le SEO. <strong>Google évalue le contenu et l’expérience, pas le volume d’entrées DNS.</strong></p></div>
       </Scene>
 
       <Scene id="checklist" index="12" eyebrow="FINAL SYSTEM AUDIT" tone="gold"
-        title={<>Valider le système.<br/><em>Fermer les failles.</em></>}
+        title={<>Valider le système.{" "}<br/><em>Fermer les failles.</em></>}
         description="Cochez les onze contrôles. La progression reste enregistrée sur cet appareil.">
         <div className="audit-console">
           <header><div><span>PRE-LAUNCH / DNS SEO</span><h3>{score===100?'SYSTEM READY':'VALIDATION IN PROGRESS'}</h3></div><div className="audit-score"><b>{score}</b><span>%</span></div></header>
@@ -429,7 +438,7 @@ export default function Home() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-dns-audit-v2')}catch{/* stockage facultatif */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Le DNS ne promet pas la première place.<br/><em>Il évite de partir avec un handicap.</em></h3><motion.a href="#introduction" whileHover={{y:-5}}>RESTART <i>↑</i></motion.a></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Le DNS ne promet pas la première place.{" "}<br/><em>Il évite de partir avec un handicap.</em></h3><motion.a href="#introduction" whileHover={{y:-5}}>RESTART <i>↑</i></motion.a></div>
       </Scene>
 
       <footer className="global-footer"><a className="wordmark" href="#introduction" aria-label="Mentalité Focus"><FocusLogo /></a><p>PLAYBOOK 011 · SEO INFRASTRUCTURE · 2026</p><a href="#introduction">TOP ↑</a></footer>
