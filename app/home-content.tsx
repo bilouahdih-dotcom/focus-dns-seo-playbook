@@ -16,21 +16,13 @@ const EDITIONS = [
   {
     num: "011",
     date: "2026 · 08",
-    href: "/seo-dns",
-    title: "DNS & Infrastructure",
-    line: "Rendre le domaine stable, rapide et canonique avant de penser au contenu.",
-    tags: ["dns", "https", "dnssec", "cdn", "redirections"],
-  },
-  {
-    num: "012",
-    date: "2026 · 08",
     href: "/seo-on-page",
     title: "SEO on-page",
     line: "Rendre chaque page compréhensible, unique et réellement utile.",
     tags: ["intention", "title", "structure", "maillage", "web vitals"],
   },
   {
-    num: "013",
+    num: "012",
     date: "2026 · 08",
     href: "/seo-off-page",
     title: "SEO off-page",
@@ -38,20 +30,28 @@ const EDITIONS = [
     tags: ["backlinks", "ancres", "marque", "notoriété", "risques"],
   },
   {
-    num: "014",
+    num: "013",
     date: "2026 · 08",
     href: "/seo-local",
     title: "SEO local",
     line: "Être trouvé dans sa ville : la carte, la fiche, les avis, les pages.",
     tags: ["pack local", "fiche", "avis", "nap", "multi-adresses"],
   },
+  {
+    num: "014",
+    date: "2026 · 08",
+    href: "/seo-dns",
+    title: "DNS & Infrastructure",
+    line: "Rendre le domaine stable, rapide et canonique : le socle sous tout le reste.",
+    tags: ["dns", "https", "dnssec", "cdn", "redirections"],
+  },
 ];
 
 const COUVERTURE = [
-  ["INFRASTRUCTURE", "Ce qui doit être en place avant que la moindre page ne compte : résolution, chiffrement, canonique, disponibilité."],
   ["PAGE", "Ce que le moteur lit et comprend d'une page : intention, structure, contenu, balisage, vitesse ressentie."],
   ["AUTORITÉ", "Ce que les autres disent de vous : liens éditoriaux, mentions de marque, et les schémas à ne pas suivre."],
   ["TERRITOIRE", "Ce qui décide sur une recherche géolocalisée : la carte, la fiche d'établissement, les avis et les pages de lieu."],
+  ["INFRASTRUCTURE", "Le socle sous tout le reste : résolution, chiffrement, version canonique, disponibilité du domaine."],
 ];
 
 export default function HomeContent() {
@@ -135,7 +135,7 @@ export default function HomeContent() {
           <a href="#manifeste">Manifeste</a>
           <a href="#couverture">Couverture</a>
         </nav>
-        <Link className="header-action" href="/seo-dns">Commencer <span>↘</span></Link>
+        <Link className="header-action" href="/seo-on-page">Commencer <span>↘</span></Link>
       </header>
 
       {/* KV : un écran plein, le cristal en fond, une invitation à défiler. */}
@@ -148,7 +148,7 @@ export default function HomeContent() {
               transition={{ duration: 1.25, ease: [.16, 1, .3, 1] }}>
               <div className="hero-kicker"><DecryptedText text="MENTALITÉ FOCUS / COLLECTION SEO" /><i /></div>
               <h1><SplitText delay={.25}><span>PLAYBOOKS</span>{" "}<br /><em>SEO</em></SplitText></h1>
-              <p className="kv-line">Quatre guides opérationnels : l&apos;infrastructure, la page, l&apos;autorité, le territoire.</p>
+              <p className="kv-line">Quatre guides opérationnels : la page, l&apos;autorité, le territoire, l&apos;infrastructure.</p>
             </motion.div>
           </motion.div>
           <a className="scroll-signal kv-scroll" href="#collection"><span>SCROLL TO EXPLORE</span><i /></a>
@@ -215,8 +215,8 @@ export default function HomeContent() {
       <section className="home-outro">
         <div className="home-outro-sticky">
           <span>MENTALITÉ FOCUS / 2026</span>
-          <h2><SplitText>Commencer par{" "}<br /><em>l&apos;infrastructure.</em></SplitText></h2>
-          <Link className="home-outro-cta" href="/seo-dns">PLAYBOOK 011 <i>↗</i></Link>
+          <h2><SplitText>Commencer par{" "}<br /><em>la page.</em></SplitText></h2>
+          <Link className="home-outro-cta" href="/seo-on-page">PLAYBOOK 011 <i>↗</i></Link>
         </div>
       </section>
 

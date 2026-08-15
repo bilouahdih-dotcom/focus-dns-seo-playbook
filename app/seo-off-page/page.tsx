@@ -53,10 +53,10 @@ export default function SeoOffPage() {
       chapters={chapters}
       navLinks={[["#autorite", "Autorité"], ["#methodes", "Méthodes"], ["#risques", "Risques"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
-      edition="PLAYBOOK 013 · SEO OFF-PAGE · 2026"
+      edition="PLAYBOOK 012 · SEO OFF-PAGE · 2026"
       baseline="Votre site dit ce qu'il vaut. Les autres le confirment."
       hero={{
-        kicker: "PLAYBOOK 013 / OFF-PAGE AUTHORITY",
+        kicker: "PLAYBOOK 012 / OFF-PAGE AUTHORITY",
         title: <><span>SEO</span>{" "}<br/><em>OFF-PAGE</em>{" "}<br/>PLAYBOOK</>,
         brief: <>Construire une autorité qui <strong>se mérite et se garde</strong> : ce que les autres sites disent de vous compte autant que ce que vous publiez.</>,
         telemetry: { label: "STATUS", state: "AUTHORITY BUILDING", detail: "LIENS · MENTIONS · MARQUE" },
@@ -161,7 +161,7 @@ export default function SeoOffPage() {
         title={<>Les raccourcis{" "}<br/><em>finissent par se voir.</em></>}
         description="Les consignes de Google interdisent les liens destinés à manipuler le classement. Les schémas ci-dessous sont détectés, et leur correction coûte plus cher que le gain espéré.">
         <div className="anti-grid">{[['01','Achat de liens en masse','Empreinte repérable, gain annulé.'],['02','Réseaux de sites (PBN)','Même hébergement, mêmes signatures.'],['03','Échanges systématiques','Liens croisés sans logique éditoriale.'],['04','Articles sponsorisés non déclarés','À marquer en sponsored ou nofollow.'],['05','Annuaires sans ligne éditoriale','Aucun lecteur, aucun effet.'],['06','Ancres suroptimisées','Le motif le plus simple à détecter.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>ABORT</b></SpotlightCard>)}</div>
-        <div className="red-rule"><span>RULE / 013</span><p>Un lien payé doit être déclaré avec l’attribut <strong>sponsored</strong>, et un contenu invité avec <strong>nofollow</strong> ou <strong>ugc</strong>. Déclarer un lien ne le rend pas inutile : cela évite qu’il devienne un problème.</p></div>
+        <div className="red-rule"><span>RULE / 012</span><p>Un lien payé doit être déclaré avec l’attribut <strong>sponsored</strong>, et un contenu invité avec <strong>nofollow</strong> ou <strong>ugc</strong>. Déclarer un lien ne le rend pas inutile : cela évite qu’il devienne un problème.</p></div>
       </Scene>
 
       <Scene id="checklist" index="11" eyebrow="FINAL AUTHORITY AUDIT" tone="gold"
@@ -173,7 +173,7 @@ export default function SeoOffPage() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-offpage-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>L&apos;autorité ne s&apos;achète pas.{" "}<br/><em>Elle se construit, puis se garde.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-local">PLAYBOOK LOCAL <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 012</span><h3>L&apos;autorité ne s&apos;achète pas.{" "}<br/><em>Elle se construit, puis se garde.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-local">PLAYBOOK LOCAL <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

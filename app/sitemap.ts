@@ -11,9 +11,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      les lister reviendrait à déclarer des doublons de la même URL. */
   return [
     { url: origin, changeFrequency: "monthly", priority: 1 },
-    { url: `${origin}/seo-dns`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-on-page`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-off-page`, changeFrequency: "monthly", priority: .9 },
     { url: `${origin}/seo-local`, changeFrequency: "monthly", priority: .9 },
+    { url: `${origin}/seo-dns`, changeFrequency: "monthly", priority: .9 },
   ];
 }

@@ -4,13 +4,13 @@ import { siteUrl } from "./site-url";
 
 const TITLE = "Playbooks SEO — Mentalité Focus";
 const DESCRIPTION =
-  "Quatre playbooks opérationnels : infrastructure DNS, optimisation on-page, autorité off-page et référencement local. Des contrôles vérifiables, dans l'ordre où ils comptent.";
+  "Quatre playbooks opérationnels : optimisation on-page, autorité off-page, référencement local et infrastructure DNS. Des contrôles vérifiables, dans l'ordre où ils comptent.";
 
 const EDITIONS = [
-  { path: "/seo-dns", name: "Playbook 011 — DNS & Infrastructure" },
-  { path: "/seo-on-page", name: "Playbook 012 — SEO on-page" },
-  { path: "/seo-off-page", name: "Playbook 013 — SEO off-page" },
-  { path: "/seo-local", name: "Playbook 014 — SEO local" },
+  { path: "/seo-on-page", name: "Playbook 011 — SEO on-page" },
+  { path: "/seo-off-page", name: "Playbook 012 — SEO off-page" },
+  { path: "/seo-local", name: "Playbook 013 — SEO local" },
+  { path: "/seo-dns", name: "Playbook 014 — DNS & Infrastructure" },
 ];
 
 export async function generateMetadata(): Promise<Metadata> {

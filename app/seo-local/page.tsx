@@ -53,10 +53,10 @@ export default function SeoLocal() {
       chapters={chapters}
       navLinks={[["#fiche", "Fiche"], ["#avis", "Avis"], ["#pages", "Pages"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
-      edition="PLAYBOOK 014 · SEO LOCAL · 2026"
+      edition="PLAYBOOK 013 · SEO LOCAL · 2026"
       baseline="On ne cherche pas un service. On cherche un service tout près."
       hero={{
-        kicker: "PLAYBOOK 014 / LOCAL SEARCH",
+        kicker: "PLAYBOOK 013 / LOCAL SEARCH",
         title: <><span>SEO</span>{" "}<br/><em>LOCAL</em>{" "}<br/>PLAYBOOK</>,
         brief: <>Être trouvé <strong>au bon endroit, au bon moment</strong> : la carte, la fiche, les avis et les pages qui ancrent une activité dans sa ville.</>,
         telemetry: { label: "STATUS", state: "VISIBLE ON THE MAP", detail: "FICHE · AVIS · NAP" },
@@ -161,7 +161,7 @@ export default function SeoLocal() {
         title={<>Ce qui fait{" "}<br/><em>suspendre une fiche.</em></>}
         description="Les suspensions de fiche sont brutales et longues à corriger. Elles viennent presque toujours des mêmes causes, toutes évitables.">
         <div className="anti-grid">{[['01','Adresse fictive','Boîte postale ou domicile non recevant.'],['02','Mots-clés dans le nom','Le nom doit être celui de l’enseigne.'],['03','Faux avis','Interdits, et sanctionnés par la loi.'],['04','Fiches dupliquées','Deux fiches, une seule adresse.'],['05','Catégorie trompeuse','Elle doit décrire l’activité réelle.'],['06','Horaires abandonnés','Le premier motif d’avis négatif.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>ABORT</b></SpotlightCard>)}</div>
-        <div className="red-rule"><span>RULE / 014</span><p>Une fiche décrit un établissement <strong>réel, accessible aux clients, à l’adresse indiquée</strong>. Tout le reste — mots-clés dans le nom, adresses de complaisance, avis fabriqués — se répare rarement vite.</p></div>
+        <div className="red-rule"><span>RULE / 013</span><p>Une fiche décrit un établissement <strong>réel, accessible aux clients, à l’adresse indiquée</strong>. Tout le reste — mots-clés dans le nom, adresses de complaisance, avis fabriqués — se répare rarement vite.</p></div>
       </Scene>
 
       <Scene id="checklist" index="11" eyebrow="FINAL LOCAL AUDIT" tone="gold"
@@ -173,7 +173,7 @@ export default function SeoLocal() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-local-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 014</span><h3>Le local ne récompense pas le plus gros.{" "}<br/><em>Il récompense le mieux tenu.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-dns">PLAYBOOK DNS <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 013</span><h3>Le local ne récompense pas le plus gros.{" "}<br/><em>Il récompense le mieux tenu.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-dns">PLAYBOOK DNS <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );

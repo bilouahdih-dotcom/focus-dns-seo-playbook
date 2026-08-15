@@ -53,10 +53,10 @@ export default function SeoOnPage() {
       chapters={chapters}
       navLinks={[["#intention", "Intention"], ["#contenu", "Contenu"], ["#maillage", "Maillage"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
-      edition="PLAYBOOK 012 · SEO ON-PAGE · 2026"
+      edition="PLAYBOOK 011 · SEO ON-PAGE · 2026"
       baseline="Une page ne se classe pas. Une réponse se classe."
       hero={{
-        kicker: "PLAYBOOK 012 / ON-PAGE OPTIMIZATION",
+        kicker: "PLAYBOOK 011 / ON-PAGE OPTIMIZATION",
         title: <><span>SEO</span>{" "}<br/><em>ON-PAGE</em>{" "}<br/>PLAYBOOK</>,
         brief: <>Rendre chaque page <strong>compréhensible, unique et utile</strong> : ce que le moteur lit, ce qu&apos;il comprend, ce qu&apos;il décide d&apos;afficher.</>,
         telemetry: { label: "STATUS", state: "PAGE READY TO RANK", detail: "TITLE · Hn · SCHEMA" },
@@ -168,7 +168,7 @@ export default function SeoOnPage() {
         title={<>Ce qui annule{" "}<br/><em>tout le reste.</em></>}
         description="La plupart des pages qui ne décollent pas ne souffrent pas d’un manque d’optimisation, mais d’un de ces défauts structurels.">
         <div className="anti-grid">{[['01','Deux pages, un sujet','Elles se concurrencent et se divisent.'],['02','Title dupliqué','Le moteur ne sait plus laquelle afficher.'],['03','Contenu sous l’onglet','Masqué au chargement, sous-évalué.'],['04','Page orpheline','Aucun lien interne n’y mène.'],['05','Canonique erronée','Elle désigne une autre page que soi.'],['06','Texte dans l’image','Invisible pour le moteur.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>ABORT</b></SpotlightCard>)}</div>
-        <div className="red-rule"><span>RULE / 012</span><p>Une intention de recherche mérite une seule page. <strong>Deux pages sur le même sujet ne doublent pas vos chances : elles les divisent.</strong></p></div>
+        <div className="red-rule"><span>RULE / 011</span><p>Une intention de recherche mérite une seule page. <strong>Deux pages sur le même sujet ne doublent pas vos chances : elles les divisent.</strong></p></div>
       </Scene>
 
       <Scene id="checklist" index="12" eyebrow="FINAL PAGE AUDIT" tone="gold"
@@ -180,7 +180,7 @@ export default function SeoOnPage() {
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
           <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-onpage-audit-v1')}catch{/* no-op */}}}>RESET AUDIT</button></footer>
         </div>
-        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 012</span><h3>Une page optimisée ne bat pas une page utile.{" "}<br/><em>Elle la rend trouvable.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-off-page">PLAYBOOK OFF-PAGE <i>↗</i></Link></motion.span></div>
+        <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Une page optimisée ne bat pas une page utile.{" "}<br/><em>Elle la rend trouvable.</em></h3><motion.span whileHover={{y:-5}} style={{display:"inline-block"}}><Link href="/seo-off-page">PLAYBOOK OFF-PAGE <i>↗</i></Link></motion.span></div>
       </Scene>
     </PlaybookShell>
   );
