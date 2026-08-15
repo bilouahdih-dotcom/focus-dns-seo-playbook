@@ -163,7 +163,7 @@ export type PlaybookHero = {
  * latéral, hero collant et pied de page. Chaque playbook fournit ses chapitres,
  * son hero et ses scènes.
  */
-export function PlaybookShell({ chapters, hero, navLinks, action, current, edition, children }: {
+export function PlaybookShell({ chapters, hero, navLinks, action, current, edition, baseline, children }: {
   chapters: readonly Chapter[];
   hero: PlaybookHero;
   navLinks: readonly (readonly [string, string])[];
@@ -171,6 +171,8 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
   /** Playbook affiché, pour le sélecteur d'édition. */
   current: "dns" | "on-page" | "off-page";
   edition: string;
+  /** Phrase de l'écran d'entrée : elle doit annoncer le playbook affiché. */
+  baseline: string;
   children: React.ReactNode;
 }) {
   const [active, setActive] = useState<string>(chapters[0][0]);
@@ -271,7 +273,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
 
   return (
     <main className="studio-shell">
-      <Loader />
+      <Loader baseline={baseline} />
       {/* Canvas persistant, comme le `Layout__gl_inner` d'alche.studio. */}
       <DnsCrystal progress={heroProgress} pageProgress={pageProgress} enabled={!reduce} />
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>

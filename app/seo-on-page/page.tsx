@@ -54,6 +54,7 @@ export default function SeoOnPage() {
       navLinks={[["#intention", "Intention"], ["#contenu", "Contenu"], ["#maillage", "Maillage"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
       edition="PLAYBOOK 012 · SEO ON-PAGE · 2026"
+      baseline="Une page ne se classe pas. Une réponse se classe."
       hero={{
         kicker: "PLAYBOOK 012 / ON-PAGE OPTIMIZATION",
         title: <><span>SEO</span>{" "}<br/><em>ON-PAGE</em>{" "}<br/>PLAYBOOK</>,

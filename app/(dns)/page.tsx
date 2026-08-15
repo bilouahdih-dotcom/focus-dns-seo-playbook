@@ -47,6 +47,7 @@ export default function Home() {
       navLinks={[["#lien", "Principes"], ["#domaine", "Architecture"], ["#records", "Système"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
       edition="PLAYBOOK 011 · SEO INFRASTRUCTURE · 2026"
+      baseline="Le DNS ne vous classe pas. Il sécurise le terrain."
       hero={{
         kicker: "PLAYBOOK 011 / SEO INFRASTRUCTURE",
         title: <><span>DNS / SEO</span>{" "}<br/><em>INFRASTRUCTURE</em>{" "}<br/>PLAYBOOK</>,

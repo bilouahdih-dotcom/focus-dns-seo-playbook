@@ -18,22 +18,26 @@ const LOGO_PATHS = [
   "M408.63 75.3098C412.79 80.9198 417.1 90.7198 418.14 97.6398C418.17 97.8598 418.33 98.3198 418.09 98.4898L387.93 105.38C383.85 95.0998 377.16 86.2198 366.19 82.8898C310.24 65.8898 303.2 175.91 359.43 170.23C374.37 168.72 384.21 157.78 389.13 144.31L419.06 152.31C419.18 153.82 418.49 155.28 417.98 156.68C405.26 191.42 368.74 207.55 333.59 196.3C306.15 187.52 290.15 165.08 287.47 136.79C284.51 105.49 295.02 74.4498 323.66 58.8398C351.02 43.9298 389.69 49.7898 408.62 75.3098H408.63Z",
 ];
 
-const BASELINE = "Le DNS ne vous classe pas. Il sécurise le terrain.";
-
-export default function Loader() {
+export default function Loader({ baseline }: { baseline: string }) {
   const reduce = useReducedMotion();
   const [gone, setGone] = useState(false);
   const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
     if (reduce) return; // le composant ne rend rien dans ce cas
+    let dejaVu = false;
+    try {
+      dejaVu = window.sessionStorage.getItem("mf-loader-seen") === "1";
+      window.sessionStorage.setItem("mf-loader-seen", "1");
+    } catch { /* navigation privée : on rejoue l'intro, sans conséquence */ }
+
     // Le voile bloque le scroll le temps de l'intro, puis se retire.
     document.documentElement.style.overflow = "hidden";
-    const fade = window.setTimeout(() => setGone(true), 2350);
+    const fade = window.setTimeout(() => setGone(true), dejaVu ? 140 : 2350);
     // Retrait du DOM sur minuterie, sans dépendre de la fin du fondu : dans un
     // onglet d'arrière-plan les rAF sont bridés et l'animation resterait gelée,
     // laissant le voile en place au retour de l'utilisateur.
-    const drop = window.setTimeout(() => setRemoved(true), 3250);
+    const drop = window.setTimeout(() => setRemoved(true), dejaVu ? 700 : 3250);
     return () => {
       window.clearTimeout(fade);
       window.clearTimeout(drop);
@@ -75,7 +79,7 @@ export default function Loader() {
         ))}
       </svg>
       <div className="loader-text">
-        {BASELINE.split("").map((char, index) => (
+        {baseline.split("").map((char, index) => (
           <motion.span
             key={`${char}-${index}`}
             initial={{ opacity: 0 }}

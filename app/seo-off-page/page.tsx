@@ -54,6 +54,7 @@ export default function SeoOffPage() {
       navLinks={[["#autorite", "Autorité"], ["#methodes", "Méthodes"], ["#risques", "Risques"], ["#checklist", "Audit"]]}
       action={["#checklist", "Lancer l’audit"]}
       edition="PLAYBOOK 013 · SEO OFF-PAGE · 2026"
+      baseline="Votre site dit ce qu'il vaut. Les autres le confirment."
       hero={{
         kicker: "PLAYBOOK 013 / OFF-PAGE AUTHORITY",
         title: <><span>SEO</span>{" "}<br/><em>OFF-PAGE</em>{" "}<br/>PLAYBOOK</>,
