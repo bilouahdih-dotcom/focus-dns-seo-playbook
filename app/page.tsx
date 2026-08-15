@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 
 const chapters = [
   ["introduction", "Intro"], ["lien", "DNS / SEO"], ["domaine", "Domaine"],
@@ -64,16 +64,22 @@ function Scene({ id, index, eyebrow, title, description, tone = "dark", children
   const reduce = useReducedMotion();
   return (
     <motion.section id={id} className={`scene scene-${tone}`}
-      initial={reduce ? false : { opacity: .3 }} whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: .08 }} transition={{ duration: .7 }}>
+      initial={reduce ? false : { opacity: .35, clipPath: "inset(5% 2% 5% 2%)" }}
+      whileInView={{ opacity: 1, clipPath: "inset(0% 0% 0% 0%)" }}
+      viewport={{ once: true, amount: .06 }} transition={{ duration: 1.15, ease: [.16, 1, .3, 1] }}>
       <div className="scene-grid" aria-hidden="true" />
       <div className="scene-crosses" aria-hidden="true"><i/><i/><i/><i/><i/><i/><i/><i/></div>
+      <motion.div className="scene-shutter" aria-hidden="true"
+        initial={reduce ? false : { y: "-110%" }} whileInView={{ y: "115%" }}
+        viewport={{ once: true, amount: .18 }} transition={{ duration: 1.35, ease: [.76, 0, .24, 1] }}/>
       <span className="scene-ghost" aria-hidden="true">{index}</span>
       <header className="scene-head">
         <div className="scene-number"><span>{index}</span><i/></div>
         <div><small><DecryptedText text={eyebrow} /></small><h2>{title}</h2><p>{description}</p></div>
       </header>
-      <div className="scene-body">{children}</div>
+      <motion.div className="scene-body" initial={reduce ? false : { opacity: 0, y: 90 }}
+        whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .08 }}
+        transition={{ duration: 1, delay: .12, ease: [.16, 1, .3, 1] }}>{children}</motion.div>
       <span className="scene-edge">SECTION / {index}</span>
     </motion.section>
   );
@@ -88,10 +94,41 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [menu, setMenu] = useState(false);
   const [checked, setChecked] = useState<number[]>([]);
+  const reduce = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  // Course réelle du hero collant = hauteur de la section moins un écran.
+  // Mesurée à la main : l'option `offset` de useScroll la calcule sur la hauteur totale.
+  const [heroRange, setHeroRange] = useState<[number, number]>([0, 1]);
+  const { scrollY } = useScroll();
+  const rawHeroProgress = useTransform(scrollY, heroRange, [0, 1], { clamp: true });
+  // Spring serré : le hero doit suivre le scroll, pas flotter derrière lui.
+  const heroProgress = useSpring(rawHeroProgress, { stiffness: 240, damping: 38, mass: .2 });
+
+  useEffect(() => {
+    const measure = () => {
+      const el = heroRef.current;
+      if (!el) return;
+      const travel = Math.max(1, el.offsetHeight - window.innerHeight);
+      setHeroRange([el.offsetTop, el.offsetTop + travel]);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  const prismScale = useTransform(heroProgress, [0, .32, .72, 1], [.72, 1.08, .9, 1.5]);
+  const prismRotate = useTransform(heroProgress, [0, .42, .75, 1], [-14, 5, -9, 22]);
+  const prismY = useTransform(heroProgress, [0, .5, 1], [45, -25, -160]);
+  const heroCopyOpacity = useTransform(heroProgress, [0, .2, .38], [1, 1, 0]);
+  const heroCopyY = useTransform(heroProgress, [0, .38], [0, -90]);
+  const gridRotate = useTransform(heroProgress, [0, .5, 1], [-2, 4, -5]);
+  const wipeY = useTransform(heroProgress, [0, .48, .68, .84, 1], ["110%", "110%", "38%", "-18%", "-115%"]);
+  const dataOpacity = useTransform(heroProgress, [0, .18, .5, .88, 1], [.35, 1, .55, 1, 0]);
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem("mf-dns-audit-v2");
+      // Hydratation client : la valeur n'existe pas au rendu serveur.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setChecked(JSON.parse(saved));
     } catch { /* stockage facultatif */ }
 
@@ -141,23 +178,31 @@ export default function Home() {
         <small>{progress}%</small>
       </aside>
 
-      <section className="hero-scene" id="introduction">
-        <div className="scene-grid" aria-hidden="true" />
-        <div className="hero-crosses" aria-hidden="true">{Array.from({length:12}).map((_,i)=><i key={i}/>)}</div>
-        <div className="dns-orb" aria-hidden="true">
-          <i className="axis a1"/><i className="axis a2"/><i className="axis a3"/>
-          <span className="orbit o1"><b/></span><span className="orbit o2"><b/></span><span className="orbit o3"><b/></span>
-          <div className="orb-core"><small>CANONICAL</small><strong>site.fr</strong><em>DNS</em></div>
+      <section className="hero-scene" id="introduction" ref={heroRef}>
+        <div className="hero-sticky">
+          <motion.div className="scene-grid hero-grid" style={{ rotate: gridRotate }} aria-hidden="true" />
+          <div className="hero-crosses" aria-hidden="true">{Array.from({length:12}).map((_,i)=><i key={i}/>)}</div>
+          <motion.div className="dns-prism" style={{ scale: prismScale, rotate: prismRotate, y: prismY }} aria-hidden="true">
+            <div className="prism-skin"><span>DNS</span><i/><i/><i/></div>
+            <div className="prism-outline"><b>site.fr</b></div>
+            <div className="prism-shadow"/>
+          </motion.div>
+          {/* Couche scroll (MotionValues) et couche d'entrée (animate) séparées :
+              les cumuler sur le même élément fait s'écraser opacity / y. */}
+          <motion.div className="hero-content" style={{ opacity: heroCopyOpacity, y: heroCopyY }}>
+            <motion.div className="hero-intro" initial={reduce ? false : {opacity:0,y:36}}
+              animate={{opacity:1,y:0}} transition={{duration:1.25,ease:[.16,1,.3,1]}}>
+              <div className="hero-kicker"><DecryptedText text="PLAYBOOK 011 / SEO INFRASTRUCTURE"/><i/></div>
+              <h1><span>DNS / SEO</span><br/><em>INFRASTRUCTURE</em><br/>PLAYBOOK</h1>
+              <div className="hero-brief"><p>Construire une infrastructure <strong>stable, rapide, sûre et canonique</strong> pour ne jamais laisser le DNS affaiblir le SEO.</p><motion.a href="#lien" whileHover={{x:7}}>Entrer dans le système <i>↘</i></motion.a></div>
+            </motion.div>
+          </motion.div>
+          <motion.div className="hero-telemetry" style={{ opacity: dataOpacity }}><span>STATUS</span><b><i/> INFRASTRUCTURE READY</b><code>HTTPS · DNSSEC · 301</code></motion.div>
+          <motion.div className="hero-light-wipe" style={{ y: wipeY, rotate: -4 }} aria-hidden="true"><span>ONE DOMAIN / ONE SIGNAL</span></motion.div>
+          <div className="scroll-signal"><span>SCROLL TO CONTROL</span><i/></div>
+          <span className="hero-coordinate">48°51′N / 02°21′E · LIVE</span>
+          <span className="hero-chapter">INTRO / 01</span>
         </div>
-        <motion.div className="hero-content" initial={{opacity:0,y:36}} animate={{opacity:1,y:0}} transition={{duration:.9,ease:[.16,1,.3,1]}}>
-          <div className="hero-kicker"><DecryptedText text="PLAYBOOK 011 / SEO INFRASTRUCTURE"/><i/></div>
-          <h1><span>ORCHESTRER</span><br/>LE DNS.<br/><em>PROTÉGER</em><br/>LE SEO.</h1>
-          <div className="hero-brief"><p>Un protocole complet pour rendre votre domaine <strong>stable, rapide, sûr et parfaitement cohérent</strong> aux yeux des moteurs.</p><motion.a href="#lien" whileHover={{x:7}}>Entrer dans le système <i>↘</i></motion.a></div>
-        </motion.div>
-        <div className="hero-telemetry"><span>STATUS</span><b><i/> INFRASTRUCTURE READY</b><code>HTTPS · DNSSEC · 301</code></div>
-        <div className="scroll-signal"><span>SCROLL TO EXPLORE</span><i/></div>
-        <span className="hero-coordinate">48°51′N / 02°21′E · LIVE</span>
-        <span className="hero-chapter">INTRO / 01</span>
       </section>
 
       <Scene id="lien" index="02" eyebrow="DNS × SEO / THE REAL LINK" tone="dark"
@@ -261,7 +306,7 @@ export default function Home() {
           <header><div><span>PRE-LAUNCH / DNS SEO</span><h3>{score===100?'SYSTEM READY':'VALIDATION IN PROGRESS'}</h3></div><div className="audit-score"><b>{score}</b><span>%</span></div></header>
           <div className="audit-progress"><i style={{width:`${score}%`}}/></div>
           <div className="audit-list">{checks.map((item,index)=><label key={item} className={checked.includes(index)?'done':''}><input type="checkbox" checked={checked.includes(index)} onChange={()=>toggle(index)}/><i>{checked.includes(index)?'✓':''}</i><span>{item}</span><small>{checked.includes(index)?'PASS':'PENDING'}</small></label>)}</div>
-          <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-dns-audit-v2')}catch{}}}>RESET AUDIT</button></footer>
+          <footer><span>{checked.length} / {checks.length} CONTROLS PASSED</span><button onClick={()=>{setChecked([]);try{window.localStorage.removeItem('mf-dns-audit-v2')}catch{/* stockage facultatif */}}}>RESET AUDIT</button></footer>
         </div>
         <div className="outro"><span>MENTALITÉ FOCUS / PLAYBOOK 011</span><h3>Le DNS ne promet pas la première place.<br/><em>Il évite de partir avec un handicap.</em></h3><motion.a href="#introduction" whileHover={{y:-5}}>RESTART <i>↑</i></motion.a></div>
       </Scene>
