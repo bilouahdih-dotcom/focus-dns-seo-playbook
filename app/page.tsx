@@ -155,7 +155,9 @@ function Protocol({ kind, title, children }: { kind: "do" | "avoid" | "note"; ti
 
 export default function Home() {
   const [active, setActive] = useState<ChapterId>("introduction");
-  const [progress, setProgress] = useState(0);
+  const readLineRef = useRef<HTMLElement>(null);
+  const railFillRef = useRef<HTMLElement>(null);
+  const percentRef = useRef<HTMLElement>(null);
   const [menu, setMenu] = useState(false);
   const [checked, setChecked] = useState<number[]>([]);
   const reduce = useReducedMotion();
@@ -238,12 +240,21 @@ export default function Home() {
     let ticking = false;
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0);
+      const pct = max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0;
+      /* Écriture directe dans le DOM plutôt qu'un setState : la progression
+         change à chaque image de défilement, et un état React re-rendrait les
+         douze scènes et les centaines de glyphes du split-text à chaque fois. */
+      if (readLineRef.current) readLineRef.current.style.transform = `scaleX(${pct / 100})`;
+      if (railFillRef.current) railFillRef.current.style.height = `${pct}%`;
+      if (percentRef.current) percentRef.current.textContent = `${pct}%`;
+
       let current: ChapterId = chapters[0][0];
       for (const [id] of chapters) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= window.innerHeight * .42) current = id;
       }
+      // Ne change qu'aux frontières de chapitre : React court-circuite le
+      // rendu quand la valeur est identique.
       setActive(current);
       ticking = false;
     };
@@ -271,7 +282,7 @@ export default function Home() {
           derrière toute la page, il traverse les scènes au lieu de s'arrêter
           avec le hero. */}
       <DnsCrystal progress={heroProgress} pageProgress={pageProgress} enabled={!reduce} />
-      <div className="read-line" aria-hidden="true"><i style={{ width: `${progress}%` }} /></div>
+      <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
       <header className="global-header">
         <a className="wordmark" href="#introduction" aria-label="Mentalité Focus — accueil"><FocusLogo /></a>
@@ -281,9 +292,9 @@ export default function Home() {
       </header>
 
       <aside className={`chapter-rail ${menu ? "open" : ""}`} aria-label="Sommaire">
-        <div className="rail-track"><i style={{ height: `${progress}%` }} /></div>
+        <div className="rail-track"><i ref={railFillRef} /></div>
         <nav>{chapters.map(([id,label],index)=><a key={id} href={`#${id}`} onClick={()=>setMenu(false)} className={active===id?"active":""}><span>{String(index+1).padStart(2,"0")}</span><b>{label}</b></a>)}</nav>
-        <small>{progress}%</small>
+        <small ref={percentRef}>0%</small>
       </aside>
 
       <section className="hero-scene" id="introduction" ref={heroRef}>

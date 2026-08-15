@@ -64,7 +64,7 @@ export default function DnsCrystal({ progress, pageProgress, enabled }: {
         /* Le canvas couvre désormais l'écran entier et tourne sur toute la
            page : le plafond de résolution compte double. On vise ~2 Mpx, ce
            qui suffit largement pour un objet réfléchissant. */
-        const budget = 2_100_000;
+        const budget = 1_500_000;
         const cap = width < 800 ? 1.25 : 1.5;
         const ratio = Math.min(window.devicePixelRatio, cap, Math.sqrt(budget / (width * height)));
         renderer.setPixelRatio(Math.max(1, ratio));
@@ -211,11 +211,19 @@ export default function DnsCrystal({ progress, pageProgress, enabled }: {
       document.addEventListener("visibilitychange", onVisibility);
 
       let frame = 0;
+      let lastDraw = 0;
       const start = performance.now();
       const render = (now: number) => {
         frame = requestAnimationFrame(render);
         if (!visible) return;
-        const hero = Math.min(1, Math.max(0, progress.get()));
+        const heroValue = Math.min(1, Math.max(0, progress.get()));
+        /* Plein régime tant que le hero pilote la scène ; au-delà le logo n'est
+           qu'un fond derrière le texte, 30 images/s suffisent et libèrent la
+           moitié du budget GPU pour le scroll. */
+        const interval = heroValue < 1 ? 0 : 33;
+        if (now - lastDraw < interval) return;
+        lastDraw = now;
+        const hero = heroValue;
         const after = Math.min(1, Math.max(0, pageProgress.get()));
         // Une seule ligne de temps : le hero occupe la première moitié,
         // la lecture du document la seconde.
