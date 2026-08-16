@@ -70,8 +70,9 @@ export default function HomeContent() {
   const kvRef = useRef<HTMLElement>(null);
   const readLineRef = useRef<HTMLElement>(null);
 
-  const [kvRange, setKvRange] = useState<[number, number]>([0, 1]);
-  const [pageRange, setPageRange] = useState<[number, number]>([0, 1]);
+  /* Plage de repli très large : voir la note du même réglage dans playbook.tsx. */
+  const [kvRange, setKvRange] = useState<[number, number]>([0, 1e9]);
+  const [pageRange, setPageRange] = useState<[number, number]>([0, 1e9]);
   const { scrollY } = useScroll();
   const rawKv = useTransform(scrollY, kvRange, [0, 1], { clamp: true });
   const kvProgress = useSpring(rawKv, { stiffness: 240, damping: 38, mass: .2 });

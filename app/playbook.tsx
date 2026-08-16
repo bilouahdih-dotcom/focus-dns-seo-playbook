@@ -185,11 +185,15 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
   const tactile = useTactile();
   const heroRef = useRef<HTMLElement>(null);
 
-  const [heroRange, setHeroRange] = useState<[number, number]>([0, 1]);
+  /* Plage de repli très large : avant la mesure, toute position de défilement
+     doit donner une progression quasi nulle. Avec [0, 1], arriver sur la page
+     avec un scroll hérité d'une navigation client plaçait le hero à la fin de
+     son animation avant de revenir au début. */
+  const [heroRange, setHeroRange] = useState<[number, number]>([0, 1e9]);
   const { scrollY } = useScroll();
   const rawHeroProgress = useTransform(scrollY, heroRange, [0, 1], { clamp: true });
   const heroProgress = useSpring(rawHeroProgress, { stiffness: 240, damping: 38, mass: .2 });
-  const [pageRange, setPageRange] = useState<[number, number]>([0, 1]);
+  const [pageRange, setPageRange] = useState<[number, number]>([0, 1e9]);
   const rawPageProgress = useTransform(scrollY, pageRange, [0, 1], { clamp: true });
   const pageProgress = useSpring(rawPageProgress, { stiffness: 160, damping: 40, mass: .3 });
 
