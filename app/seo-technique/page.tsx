@@ -72,7 +72,7 @@ export default function SeoTechnique() {
         <div className="impact-matrix">
           {[['01','Exploration','Le robot demande l’URL. Un blocage, une erreur serveur ou une lenteur l’arrête ici.'],['02','Rendu','Le HTML est traité, le JavaScript éventuellement exécuté, plus tard et sans garantie.'],['03','Indexation','Le contenu obtenu est jugé digne d’être stocké. Ou non.'],['04','Classement','Seulement là interviennent le contenu, les liens et l’intention.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>PIPELINE</b></SpotlightCard>)}
         </div>
-        <Protocol kind="note" title="Où ce playbook s’arrête">Le contenu et les Core Web Vitals relèvent du playbook on-page ; la résolution du domaine, HTTPS et le CDN relèvent du playbook DNS. Ici, on traite ce qu’il y a entre les deux.</Protocol>
+        <Protocol kind="note" title="Où ce playbook s’arrête">Le contenu et les Core Web Vitals relèvent du <Link href="/seo-on-page">playbook 011, on-page</Link> ; la résolution du domaine, HTTPS et le CDN relèvent du <Link href="/seo-dns">playbook 015, DNS</Link>. Ici, on traite ce qu’il y a entre les deux.</Protocol>
       </Scene>
 
       <Scene id="robots" index="03" eyebrow="ROBOTS.TXT" tone="light"

@@ -81,7 +81,7 @@ export default function SeoOnPage() {
         <div className="canonical-stage">
           <div className="incoming-routes"><small>INPUT / VARIANTS</small><code><i/>Accueil - Site</code><code><i/>Bienvenue sur notre site</code><code><i/>Services | Entreprise | Ville</code></div>
           <div className="redirect-engine"><span>REWRITE</span><strong>60 / 155</strong><div className="pulse-arrow">→</div><small>CARACTÈRES MAX</small></div>
-          <div className="canonical-target"><span>TITLE UTILE</span><strong>Configurer un DNS sans nuire au SEO</strong><b><i/> UNIQUE · EXPLICITE</b></div>
+          <div className="canonical-target"><span>TITLE UTILE</span><strong>Chaussures de rando : comment choisir</strong><b><i/> UNIQUE · EXPLICITE</b></div>
         </div>
         <div className="protocol-row">
           <Protocol kind="do" title="À faire">Le mot-clé principal au début, un bénéfice concret ensuite, la marque à la fin seulement si la place le permet.</Protocol>
@@ -116,7 +116,7 @@ export default function SeoOnPage() {
         title={<>Une URL se lit{" "}<br/><em>avant d&apos;être cliquée.</em></>}
         description="Courte, stable et descriptive : l’URL est affichée dans les résultats, partagée telle quelle, et doit rester valable des années.">
         <div className="exposure-table"><header><span>URL</span><span>LISIBILITÉ</span><span>RISQUE</span><span>ACTION</span></header>
-          {[['/p?id=48219','FAIBLE','HIGH','RÉÉCRIRE'],['/blog/2019/05/article-final-v2','MOYENNE','MEDIUM','SIMPLIFIER'],['/seo/dns','FORTE','LOW','CONSERVER'],['/services/agence-seo-paris','FORTE','LOW','CONSERVER']].map(([url,lis,risk,action])=><div key={url} className={`risk-${risk.toLowerCase()}`}><code><i/>{url}</code><span>{lis}</span><b>{risk}</b><strong>{action}</strong></div>)}
+          {[['/p?id=48219','FAIBLE','HIGH','RÉÉCRIRE'],['/blog/2019/05/article-final-v2','MOYENNE','MEDIUM','SIMPLIFIER'],['/chaussures/randonnee','FORTE','LOW','CONSERVER'],['/services/agence-seo-paris','FORTE','LOW','CONSERVER']].map(([url,lis,risk,action])=><div key={url} className={`risk-${risk.toLowerCase()}`}><code><i/>{url}</code><span>{lis}</span><b>{risk}</b><strong>{action}</strong></div>)}
         </div>
         <div className="protocol-row">
           <Protocol kind="do" title="Structure">Des mots séparés par des tirets, en minuscules, sans accent, reflétant le chemin logique du site.</Protocol>
@@ -141,7 +141,7 @@ export default function SeoOnPage() {
         description="L’attribut alt sert d’abord aux personnes qui n’voient pas l’image, puis au moteur. Le poids, lui, décide de la vitesse perçue.">
         <div className="verification-stage">
           <ol>{[['01','Décrire l’image, pas le mot-clé'],['02','Servir en AVIF ou WebP'],['03','Dimensionner à la taille réelle d’affichage'],['04','Différer le chargement hors écran']].map(([n,t])=><li key={n}><span>{n}</span><b>{t}</b></li>)}</ol>
-          <div className="txt-terminal"><header><span>MARKUP / IMG</span><b>ALT</b></header><dl><div><dt>FORMAT</dt><dd>AVIF</dd></div><div><dt>POIDS</dt><dd>84 Ko</dd></div><div><dt>LOADING</dt><dd>LAZY</dd></div></dl><small>ATTRIBUT ALT</small><code>alt=&quot;<b>Zone DNS avec un enregistrement A et un CNAME</b>&quot;</code><footer><i/> DESCRIPTIF ET UTILE</footer></div>
+          <div className="txt-terminal"><header><span>MARKUP / IMG</span><b>ALT</b></header><dl><div><dt>FORMAT</dt><dd>AVIF</dd></div><div><dt>POIDS</dt><dd>84 Ko</dd></div><div><dt>LOADING</dt><dd>LAZY</dd></div></dl><small>ATTRIBUT ALT</small><code>alt=&quot;<b>Semelle crantée d&apos;une chaussure de randonnée sur roche humide</b>&quot;</code><footer><i/> DESCRIPTIF ET UTILE</footer></div>
         </div>
         <Protocol kind="do" title="Bon alt">Écrivez ce que vous diriez à quelqu’un au téléphone pour décrire l’image. Si l’image est purement décorative, laissez l’attribut vide.</Protocol>
       </Scene>

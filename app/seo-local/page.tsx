@@ -72,7 +72,7 @@ export default function SeoLocal() {
         <div className="impact-matrix">
           {[['01','Pertinence','La fiche correspond-elle à ce qui est cherché : catégorie, services, mots employés.'],['02','Distance','La position de la personne face à l’établissement. Le seul facteur qui ne se travaille pas.'],['03','Notoriété','Avis, citations, presse locale, popularité du site : ce qui fait exister l’adresse.'],['04','Activité','Fiche tenue, photos récentes, réponses aux avis : un établissement vivant remonte.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>RANKING FACTOR</b></SpotlightCard>)}
         </div>
-        <Protocol kind="note" title="Le rapport de force">Une fiche bien tenue rapporte souvent plus vite qu’un mois de netlinking. Le local est le seul terrain où un petit acteur bat structurellement un grand.</Protocol>
+        <Protocol kind="note" title="Le rapport de force">Une fiche bien tenue rapporte souvent plus vite qu’un mois de <Link href="/seo-off-page">netlinking</Link>. Le local est le seul terrain où un petit acteur bat structurellement un grand.</Protocol>
       </Scene>
 
       <Scene id="fiche" index="03" eyebrow="BUSINESS PROFILE" tone="light"

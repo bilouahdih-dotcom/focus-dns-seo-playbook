@@ -8,7 +8,7 @@ import { PlaybookShell, Scene, SpotlightCard, Protocol } from "../playbook";
 const chapters = [
   ["introduction", "Intro"], ["autorite", "Autorité"], ["backlink", "Backlink"],
   ["sources", "Sources"], ["ancres", "Ancres"], ["methodes", "Méthodes"],
-  ["marque", "Marque"], ["local", "Local"], ["analyse", "Analyse"],
+  ["marque", "Marque"], ["citations", "Citations"], ["analyse", "Analyse"],
   ["risques", "Risques"], ["checklist", "Checklist"],
 ] as const;
 
@@ -19,8 +19,8 @@ const checks = [
   "Liens obtenus depuis des sites du même univers",
   "Aucun lien acheté en masse ni échangé en réseau",
   "Mentions de marque non liées identifiées",
-  "Fiche Google Business Profile complète et à jour",
-  "Coordonnées identiques partout (nom, adresse, téléphone)",
+  "Citations professionnelles cohérentes (raison sociale, adresse)",
+  "Annuaires de secteur réellement lus, pas des inscriptions automatiques",
   "Profil de liens surveillé chaque trimestre",
   "Liens cassés vers le site récupérés",
   "Concurrents analysés sur leurs sources de liens",
@@ -134,15 +134,15 @@ export default function SeoOffPage() {
         <Protocol kind="do" title="Le réflexe">Une alerte sur le nom de la marque suffit à repérer chaque semaine les mentions à transformer en liens.</Protocol>
       </Scene>
 
-      <Scene id="local" index="08" eyebrow="LOCAL & CITATIONS" tone="dark"
-        title={<>Pour un commerce,{" "}<br/><em>la carte prime.</em></>}
-        description="En local, la fiche d’établissement et la cohérence des coordonnées pèsent plus lourd que le nombre de liens. Une adresse écrite différemment partout brouille le signal.">
-        <div className="trust-route">{[['01','FICHE','GOOGLE'],['02','CITATIONS','ANNUAIRES'],['03','AVIS','CLIENTS'],['✓','CARTE','VISIBLE']].map(([n,t,m],i)=><div key={t} className={i===3?'verified':''}><span>{n}</span><b>{t}</b><small>{m}</small>{i < 3 ? <i>→</i> : null}</div>)}</div>
+      <Scene id="citations" index="08" eyebrow="CITATIONS AS SIGNALS" tone="dark"
+        title={<>Être cité sans lien{" "}<br/><em>compte aussi.</em></>}
+        description="Annuaires professionnels, syndicats, fédérations, presse spécialisée : ces sources vous nomment, parfois sans lien cliquable. Elles participent malgré tout à la reconnaissance de l'entité.">
+        <div className="trust-route">{[['01','SOURCE','VOUS NOMME'],['02','CITATION','AVEC OU SANS LIEN'],['03','RECOUPEMENT','MÊMES DONNÉES'],['✓','ENTITÉ','RECONNUE']].map(([n,t,m],i)=><div key={t} className={i===3?'verified':''}><span>{n}</span><b>{t}</b><small>{m}</small>{i < 3 ? <i>→</i> : null}</div>)}</div>
         <div className="trust-notes">
-          <SpotlightCard><span>COHÉRENCE</span><h3>Nom, adresse, téléphone</h3><p>Exactement la même écriture sur la fiche, le site et chaque annuaire. Les variations diluent la reconnaissance de l’établissement.</p></SpotlightCard>
-          <SpotlightCard><span>ACTIVITÉ</span><h3>Une fiche vivante</h3><p>Photos récentes, horaires exacts, réponses aux avis : une fiche entretenue ressort devant une fiche abandonnée.</p></SpotlightCard>
+          <SpotlightCard><span>COHÉRENCE</span><h3>Les mêmes informations partout</h3><p>Raison sociale, adresse et téléphone écrits à l&apos;identique d&apos;une source à l&apos;autre. Les variations font douter qu&apos;il s&apos;agisse de la même entreprise.</p></SpotlightCard>
+          <SpotlightCard><span>QUALITÉ</span><h3>Des annuaires qui existent</h3><p>Un répertoire lu par des professionnels du secteur vaut mieux que cent inscriptions automatiques sur des sites que personne n&apos;ouvre.</p></SpotlightCard>
         </div>
-        <Protocol kind="note" title="Priorité">Pour une activité locale, une fiche complète et des avis réguliers rapportent plus vite que n’importe quelle campagne de liens.</Protocol>
+        <Protocol kind="note" title="Pour aller plus loin">La présence sur la carte, la fiche d&apos;établissement et les avis relèvent du <Link href="/seo-local">playbook 013, SEO local</Link> : ils obéissent à d&apos;autres critères que les liens.</Protocol>
       </Scene>
 
       <Scene id="analyse" index="09" eyebrow="PROFILE ANALYSIS" tone="light"

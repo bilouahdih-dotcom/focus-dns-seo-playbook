@@ -66,7 +66,7 @@ export default function Home() {
         <div className="impact-matrix">
           {[['01','Résolution','Le domaine répond vite et sans interruption.'],['02','Exploration','Les robots atteignent toujours la bonne version.'],['03','Confiance','HTTPS et DNSSEC protègent les échanges.'],['04','Expérience','Moins d’erreurs, de latence et de rebonds.']].map(([n,t,d])=><SpotlightCard key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><b>INDIRECT SEO SIGNAL</b></SpotlightCard>)}
         </div>
-        <Protocol kind="note" title="Le principe">Le DNS prépare l’infrastructure. Le contenu, l’intention de recherche et la popularité restent les moteurs du classement.</Protocol>
+        <Protocol kind="note" title="Le principe">Le DNS prépare l’infrastructure. Le contenu et <Link href="/seo-on-page">l’intention de recherche</Link> restent les moteurs du classement.</Protocol>
       </Scene>
 
       <Scene id="domaine" index="03" eyebrow="CANONICAL ARCHITECTURE" tone="light"
