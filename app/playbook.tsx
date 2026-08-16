@@ -6,6 +6,7 @@ import Link from "next/link";
 import Lenis from "lenis";
 import DnsCrystal from "./DnsCrystal";
 import Loader from "./Loader";
+import { useTactile } from "./use-tactile";
 
 /* Pièces communes aux playbooks. Les deux pages partagent le même système
    (canvas persistant, hero collant, scènes révélées, sommaire latéral) : il
@@ -181,6 +182,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
   const percentRef = useRef<HTMLElement>(null);
   const [menu, setMenu] = useState(false);
   const reduce = useReducedMotion();
+  const tactile = useTactile();
   const heroRef = useRef<HTMLElement>(null);
 
   const [heroRange, setHeroRange] = useState<[number, number]>([0, 1]);
@@ -200,10 +202,13 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
   const wipeY = useTransform(heroProgress, [0, .62, .78, .9, 1], ["118%", "118%", "34%", "-45%", "-135%"]);
   const dataOpacity = useTransform(heroProgress, [0, .18, .5, .88, 1], [.35, 1, .55, 1, 0]);
 
-  // Smooth scroll inertiel (alche.studio tourne sur Lenis). Il pilote aussi
-  // les ancres, sinon `scroll-behavior:smooth` et Lenis se disputent le scroll.
+  /* Smooth scroll inertiel (alche.studio tourne sur Lenis). Il pilote aussi
+     les ancres, sinon `scroll-behavior:smooth` et Lenis se disputent le scroll.
+     Jamais sur tactile : le défilement d'un téléphone est géré par le
+     compositeur du navigateur, le remplacer par du JavaScript le rend saccadé
+     et casse l'élan, le rebond et le masquage de la barre d'adresse. */
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || tactile) return;
     const lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), touchMultiplier: 1.6 });
     let frame = 0;
     const raf = (time: number) => {
@@ -227,7 +232,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       document.removeEventListener("click", onAnchorClick);
       lenis.destroy();
     };
-  }, [reduce]);
+  }, [reduce, tactile]);
 
   useEffect(() => {
     const measure = () => {
@@ -275,7 +280,7 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
     <main className="studio-shell">
       <Loader baseline={baseline} />
       {/* Canvas persistant, comme le `Layout__gl_inner` d'alche.studio. */}
-      <DnsCrystal progress={heroProgress} pageProgress={pageProgress} enabled={!reduce} />
+      {!reduce && !tactile && <DnsCrystal progress={heroProgress} pageProgress={pageProgress} enabled />}
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
       <header className="global-header">

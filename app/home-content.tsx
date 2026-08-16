@@ -7,6 +7,7 @@ import Lenis from "lenis";
 import DnsCrystal from "./DnsCrystal";
 import Loader from "./Loader";
 import { DecryptedText, SplitText, FocusLogo } from "./playbook";
+import { useTactile } from "./use-tactile";
 
 /* Accueil calqué sur l'enchaînement d'alche.studio : visuel plein écran, une
    intro courte, la collection en liste (leur section Works), un manifeste, ce
@@ -65,6 +66,7 @@ const COUVERTURE = [
 
 export default function HomeContent() {
   const reduce = useReducedMotion();
+  const tactile = useTactile();
   const kvRef = useRef<HTMLElement>(null);
   const readLineRef = useRef<HTMLElement>(null);
 
@@ -81,8 +83,9 @@ export default function HomeContent() {
   const gridRotate = useTransform(kvProgress, [0, 1], [-2, 4]);
 
   // Smooth scroll inertiel, comme sur les playbooks.
+  // Pas de smooth scroll JavaScript sur tactile : voir use-tactile.
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || tactile) return;
     const lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), touchMultiplier: 1.6 });
     let frame = 0;
     const raf = (time: number) => { lenis.raf(time); frame = requestAnimationFrame(raf); };
@@ -101,7 +104,7 @@ export default function HomeContent() {
       document.removeEventListener("click", onAnchorClick);
       lenis.destroy();
     };
-  }, [reduce]);
+  }, [reduce, tactile]);
 
   useEffect(() => {
     const measure = () => {
@@ -134,10 +137,13 @@ export default function HomeContent() {
   return (
     <main className="studio-shell">
       <Loader baseline="Cinq playbooks. Une seule discipline." />
-      <DnsCrystal progress={kvProgress} pageProgress={pageProgress} enabled={!reduce} />
+      {!reduce && !tactile && <DnsCrystal progress={kvProgress} pageProgress={pageProgress} enabled />}
       <div className="read-line" aria-hidden="true"><i ref={readLineRef} /></div>
 
-      <header className="global-header">
+      {/* `home-header` : l'accueil n'a pas de menu latéral, donc pas de bouton
+          hamburger pour compenser la nav masquée sur mobile. Son appel à
+          l'action doit rester visible. */}
+      <header className="global-header home-header">
         <a className="wordmark" href="#kv" aria-label="Mentalité Focus — accueil"><FocusLogo /></a>
         <nav aria-label="Navigation principale">
           <a href="#collection">Collection</a>

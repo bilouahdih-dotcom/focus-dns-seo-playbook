@@ -134,12 +134,44 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
   /* Aligné sur le retrait des autres sections, pas collé au bord. */
   .kv-content{padding-left:6vw;width:88vw}
   .kv-scroll{left:6vw}
+  /* Moins de défilement à vide : sur mobile ces écrans collants coûtent
+     plusieurs hauteurs d'écran avant d'arriver au contenu. */
+  .kv{height:150svh;min-height:1000px}
+  .home-outro{height:130svh;min-height:800px}
   .collection,.coverage{padding-left:6vw;padding-right:6vw}
   .edition-list a{grid-template-columns:60px minmax(0,1fr);gap:6px 16px}
   .edition-date{grid-column:2;justify-self:start}
   .edition-list h3,.edition-list p,.edition-tags{grid-column:1/-1}
   .edition-list a>i{grid-column:2;grid-row:1;justify-self:end}
   .coverage-grid{grid-template-columns:1fr}
+}
+
+/* ---- Ajustements tactiles ----
+   Sur un pointeur grossier, un :hover reste « collé » après un appui : ces
+   effets sont donc réservés aux appareils qui pointent réellement. */
+@media(hover:none){
+  .edition-list a:hover{background:none;padding-left:0;padding-right:0}
+  .edition-list a:hover>i{transform:none}
+  .spotlight-card:hover::before{opacity:0}
+  .audit-list label:hover{border-color:var(--border-medium);transform:none}
+  .home-outro-cta:hover{background:transparent;color:var(--gold)}
+}
+/* L'accueil garde son appel à l'action sur mobile : sans menu latéral, il n'a
+   aucun autre point d'entrée vers les playbooks depuis l'en-tête. */
+@media(max-width:800px){
+  .home-header .header-action{display:flex;margin-left:auto;padding:9px 9px 9px 15px;gap:12px}
+  .home-header .header-action span{width:24px;height:24px;font-size:13px}
+}
+
+/* Cibles tactiles : 44 px de haut au minimum, sinon l'appui rate. */
+@media(pointer:coarse){
+  .edition-switch a{min-height:44px;padding:0 14px}
+  .mobile-trigger{width:44px;height:44px}
+  .chapter-rail nav a{min-height:48px}
+  .global-footer .footer-links a{padding:12px 0}
+  .audit-list label{min-height:56px}
+  .wordmark{min-height:44px;align-items:center}
+  .global-header nav a,.hero-brief a,.outro a,.kv-scroll{min-height:44px;display:inline-flex;align-items:center}
 }
 
 /* Sélecteur d'édition : passage d'un playbook à l'autre, posé sous l'en-tête */
@@ -159,7 +191,14 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 /* Le groupe s'allonge à chaque édition : sous 1300px on garde les numéros,
    qui suffisent à se repérer une fois la collection connue. */
 @media(max-width:1500px){.edition-switch a b{display:none}.edition-switch a{padding:9px 12px}}
-@media(max-width:800px){.edition-switch{right:auto;left:52px;top:88px}}
+/* Sur mobile, six entrées ne tiennent pas en largeur : la barre part du bord
+   du sommaire, prend toute la place restante et défile horizontalement. Elle
+   était sinon coupée, les dernières éditions inatteignables. */
+@media(max-width:800px){
+  .edition-switch{right:8px;left:44px;top:82px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;background:transparent;border:0;gap:6px}
+  .edition-switch::-webkit-scrollbar{display:none}
+  .edition-switch a{flex:0 0 auto;border:1px solid var(--border-medium)}
+}
 
 /* Shared technical grid */
 .scene-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.085) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.085) 1px,transparent 1px);background-size:clamp(110px,12.5vw,190px) 132px;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
@@ -262,7 +301,7 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inhe
 }
 @media(max-width:800px){
   .global-header{height:76px;padding:0 16px 0 18px}.global-header nav,.header-action{display:none}.mobile-trigger{display:block;margin-left:auto}.chapter-rail{width:min(340px,88vw);padding:90px 24px 30px;transform:translateX(-105%);background:rgba(5,5,5,.97);border-right:1px solid #333;mix-blend-mode:normal;transition:transform .4s var(--ease)}.chapter-rail.open{transform:none}.chapter-rail .rail-track,.chapter-rail>small{display:none}.chapter-rail nav{height:auto;margin:0;display:grid}.chapter-rail nav a{min-height:46px;color:#73716b}.chapter-rail nav a::before{display:none}.chapter-rail nav a span{width:35px;display:block;color:var(--text-light)}.chapter-rail nav a b{position:static;opacity:1;transform:none;font-size:13px}.chapter-rail nav a.active,.chapter-rail nav a.active span{color:var(--gold)}
-  .hero-scene{min-height:2100px}.hero-sticky{min-height:650px}.hero-content{width:78vw;padding:0 22px 8vh 48px}.hero-content h1{font-size:clamp(38px,10vw,58px)}.dns-prism{width:82vw;left:67%;top:40%;opacity:.8}.hero-brief{width:min(390px,82vw)}.hero-telemetry,.hero-coordinate{display:none}.scroll-signal{left:48px}.hero-chapter,.scene-edge{left:15px}.hero-light-wipe{height:55vh}
+  .hero-scene{height:210svh;min-height:1500px}.hero-sticky{min-height:560px}.hero-content{width:78vw;padding:0 22px 8vh 48px}.hero-content h1{font-size:clamp(38px,10vw,58px)}.dns-prism{width:82vw;left:67%;top:40%;opacity:.8}.hero-brief{width:min(390px,82vw)}.hero-telemetry,.hero-coordinate{display:none}.scroll-signal{left:48px}.hero-chapter,.scene-edge{left:15px}.hero-light-wipe{height:55vh}
   .scene{padding:105px 22px 75px 48px}.scene-head{grid-template-columns:1fr;gap:12px}.scene-number i{width:40px}.scene-head h2{font-size:clamp(36px,9vw,56px)}.scene-body{margin-top:42px}.scene-ghost{font-size:50vw}
   .canonical-stage,.ssl-stage,.verification-stage{grid-template-columns:1fr}.redirect-engine{padding:25px}.pulse-arrow{transform:rotate(90deg)}@keyframes arrowPulse{50%{transform:rotate(90deg) translateX(10px)}}.protocol-row,.trust-notes{grid-template-columns:1fr}
   .exposure-table>header{display:none}.exposure-table>div{grid-template-columns:1fr auto}.exposure-table div>span{display:none}.exposure-table div>strong{grid-column:1/-1;justify-self:start}.trust-route{grid-template-columns:1fr 1fr}.trust-route>div:nth-child(3){border-left:1px solid var(--border-medium)}.cdn-decisions{grid-template-columns:1fr}.network-radar,.cdn-globe{height:480px}.audit-list{grid-template-columns:1fr}.global-footer{padding-left:48px}
