@@ -248,8 +248,16 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
       setPageRange([el.offsetTop + travel, end]);
     };
     measure();
+    // La hauteur du document bouge encore après le montage (content-visibility,
+    // polices) : on remesure une fois le rendu posé.
+    const parFrame = requestAnimationFrame(measure);
+    const apresRendu = window.setTimeout(measure, 150);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(parFrame);
+      window.clearTimeout(apresRendu);
+      window.removeEventListener("resize", measure);
+    };
   }, []);
 
   useEffect(() => {
@@ -275,9 +283,19 @@ export function PlaybookShell({ chapters, hero, navLinks, action, current, editi
     const onScroll = () => {
       if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
     };
+    /* Recalcul différé en plus du calcul au montage : lors d'une navigation
+       client, le premier passage lit encore la position héritée de la page
+       précédente et fige une progression fausse — aucun défilement ne survient
+       ensuite pour la corriger. */
     update();
+    const parFrame = requestAnimationFrame(update);
+    const apresRendu = window.setTimeout(update, 150);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(parFrame);
+      window.clearTimeout(apresRendu);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [chapters]);
 
   return (

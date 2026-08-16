@@ -117,8 +117,14 @@ export default function HomeContent() {
       setPageRange([el.offsetTop + travel, end]);
     };
     measure();
+    const parFrame = requestAnimationFrame(measure);
+    const apresRendu = window.setTimeout(measure, 150);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(parFrame);
+      window.clearTimeout(apresRendu);
+      window.removeEventListener("resize", measure);
+    };
   }, []);
 
   useEffect(() => {
@@ -130,9 +136,16 @@ export default function HomeContent() {
       ticking = false;
     };
     const onScroll = () => { if (!ticking) { window.requestAnimationFrame(update); ticking = true; } };
+    // Voir la note du même recalcul dans playbook.tsx.
     update();
+    const parFrame = requestAnimationFrame(update);
+    const apresRendu = window.setTimeout(update, 150);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(parFrame);
+      window.clearTimeout(apresRendu);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
